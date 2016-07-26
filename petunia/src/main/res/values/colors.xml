@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary_color_purple">#72166b</color>
+
+    <color name="supporting_color_dark_purple">#3c0555</color>
+    <color name="supporting_color_light_purple">#aa73a6</color>
+
+    <color name="secondary_color_dark_grey">#292c38</color>
+    <color name="secondary_color_grey">#666666</color>
+    <color name="secondary_color_light_grey">#c6c6c6</color>
+
+    <color name="white_transparent">#AAFFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="text_primary">#d9000000</color>
+    <color name="text_secondary">#8c000000</color>
+    <color name="divider">#1a000000</color>
+
+    <color name="error">#D50000</color>
+
+    <array name="chart_colors">
+        <item>#00bfa5</item>
+        <item>#c51162</item>
+        <item>#304ffe</item>
+        <item>#0091ea</item>
+        <item>#ffab00</item>
+        <item>#ab2cff</item>
+        <item>#0a10bf</item>
+        <item>#0f5c00</item>
+    </array>
+    <array name="chart_circle_colors">
+        <item>#1de9b6</item>
+        <item>#ff4081</item>
+        <item>#536dfe</item>
+        <item>#40c4ff</item>
+        <item>#ffd740</item>
+        <item>#c771ff</item>
+        <item>#4b4fbc</item>
+        <item>#38662f</item>
+    </array>
+</resources>
