@@ -34,7 +34,7 @@ public class DashboardItem implements Serializable {
   }
 
   public String getTitle() {
-    return sensor.getId();
+    return sensor.getName();
   }
 
   public String getValue() {

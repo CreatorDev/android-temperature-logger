@@ -13,23 +13,23 @@
  * WD4 8LZ, U.K.
  */
 
-package com.imgtec.creator.petunia.data.api;
+package com.imgtec.creator.petunia.data.api.requests;
 
-import com.imgtec.creator.petunia.data.api.pojo.Client;
-import com.imgtec.creator.petunia.data.api.pojo.Clients;
+import com.imgtec.creator.petunia.data.api.pojo.Hateoas;
 
-import java.io.IOException;
+import okhttp3.Request;
 
 /**
  *
  */
-public interface ApiService {
+public class GetRequest<T extends Hateoas> extends BaseRequest<T> {
 
-
-  interface Filter<T> {
-    boolean accept(final Client client);
+  public GetRequest(String url) {
+    super(url);
   }
 
-  Clients getClients(Filter<Client> filter) throws IOException;
-
+  @Override
+  public Request prepareRequest() {
+    return new Request.Builder().url(getUrl()).get().build();
+  }
 }

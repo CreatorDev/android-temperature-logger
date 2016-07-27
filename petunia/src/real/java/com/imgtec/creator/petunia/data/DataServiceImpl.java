@@ -21,7 +21,12 @@ import android.os.Handler;
 import com.imgtec.creator.petunia.data.api.ApiService;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
+import com.imgtec.creator.petunia.data.api.pojo.Data;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +35,9 @@ import java.util.concurrent.ScheduledExecutorService;
  *
  */
 public class DataServiceImpl implements DataService {
+
+  final Logger logger = LoggerFactory.getLogger(getClass());
+  final Measurement DUMMY_MEASUREMENT = new Measurement("dummy", 0, new Date());
 
   final Context context;
   final ScheduledExecutorService executor;
@@ -50,21 +58,46 @@ public class DataServiceImpl implements DataService {
     executor.execute(new Runnable() {
       @Override
       public void run() {
-        //TODO: implement
 
-        mainHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callback.onFailure(DataServiceImpl.this, new IllegalStateException("Not yet implemented"));
+        try {
+          final Clients clients = apiService.getClients(new ApiService.Filter<Client>() {
+            @Override
+            public boolean accept(Client client) {
+              return true;
+            }
+          });
+
+          final List<Sensor> sensors = new ArrayList<>(clients.getItems().size());
+          for (Client c: clients.getItems()) {
+            final Data data = c.getData().get(0);
+            sensors.add(new Sensor(data.getId(), data.getClientName()));
           }
-        });
+
+          //TODO: implement
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onSuccess(DataServiceImpl.this, sensors);
+            }
+          });
+        }
+        catch (final Exception e) {
+          logger.warn("Requesting sensors failed!", e);
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onFailure(DataServiceImpl.this, new IllegalStateException("Not yet implemented"));
+            }
+          });
+        }
       }
     });
   }
 
   @Override
   public Measurement getLastMeasurementForSensor(final Sensor sensor) {
-    return null;
+    return DUMMY_MEASUREMENT;
   }
 
   @Override
@@ -93,6 +126,8 @@ public class DataServiceImpl implements DataService {
                                   DataCallback2<List<Sensor>, List<Measurement>> callback) {
 
   }
+
+
 
   public static class Builder {
 

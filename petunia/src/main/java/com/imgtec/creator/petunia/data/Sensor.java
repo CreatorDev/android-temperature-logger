@@ -21,12 +21,18 @@ package com.imgtec.creator.petunia.data;
 public class Sensor {
 
   private final String id;
+  private final String name;
 
-  public Sensor(String id) {
+  public Sensor(String id, String name) {
     this.id = id;
+    this.name = name;
   }
 
   public String getId() {
     return id;
+  }
+
+  public String getName() {
+    return name;
   }
 }
