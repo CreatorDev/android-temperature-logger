@@ -37,7 +37,7 @@ public class DashboardItem implements Serializable {
     return sensor.getName();
   }
 
-  public String getValue() {
+  public float getValue() {
     return measurement.getValue();
   }
 

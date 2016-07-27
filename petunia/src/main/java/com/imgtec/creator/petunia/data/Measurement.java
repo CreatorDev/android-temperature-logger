@@ -38,8 +38,8 @@ public class Measurement {
     return sensorId;
   }
 
-  public String getValue() {
-    return String.valueOf(value);
+  public float getValue() {
+    return value;
   }
 
   public int getType() {

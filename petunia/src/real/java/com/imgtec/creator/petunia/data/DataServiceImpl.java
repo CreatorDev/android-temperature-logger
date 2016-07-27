@@ -26,9 +26,13 @@ import com.imgtec.creator.petunia.data.api.pojo.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -37,12 +41,19 @@ import java.util.concurrent.ScheduledExecutorService;
 public class DataServiceImpl implements DataService {
 
   final Logger logger = LoggerFactory.getLogger(getClass());
-  final Measurement DUMMY_MEASUREMENT = new Measurement("dummy", 0, new Date());
+  static final Measurement DUMMY_MEASUREMENT = new Measurement("N/A", 0, new Date());
+  static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
   final Context context;
   final ScheduledExecutorService executor;
   final Handler mainHandler;
   final ApiService apiService;
+  final Map<Sensor, Measurement> sensorMeasurementMap = new HashMap<>();
+
+  static {
+    dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+  }
+
 
   DataServiceImpl(Builder builder) {
     super();
@@ -69,11 +80,17 @@ public class DataServiceImpl implements DataService {
 
           final List<Sensor> sensors = new ArrayList<>(clients.getItems().size());
           for (Client c: clients.getItems()) {
-            final Data data = c.getData().get(0);
-            sensors.add(new Sensor(data.getId(), data.getClientName()));
-          }
+            final Data data = c.getData().get(0); //FIXME: refactor JSON structure
+            final Sensor sensor = new Sensor(data.getId(), data.getClientName());
+            final Measurement m = new Measurement(sensor.getId(),
+                                                  Float.parseFloat(data.getData()),
+                                                  dateFormatter.parse(data.getTimestamp()));
 
-          //TODO: implement
+            synchronized (sensorMeasurementMap) {
+              sensorMeasurementMap.put(sensor, m);
+            }
+            sensors.add(sensor);
+          }
 
           mainHandler.post(new Runnable() {
             @Override
@@ -97,7 +114,14 @@ public class DataServiceImpl implements DataService {
 
   @Override
   public Measurement getLastMeasurementForSensor(final Sensor sensor) {
-    return DUMMY_MEASUREMENT;
+    Measurement m;
+    synchronized (sensorMeasurementMap) {
+      m = sensorMeasurementMap.get(sensor);
+    }
+    if (m == null) {
+      return DUMMY_MEASUREMENT;
+    }
+    return m;
   }
 
   @Override
