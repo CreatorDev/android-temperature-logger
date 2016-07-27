@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/di/di.iml" filepath="$PROJECT_DIR$/di/di.iml" />
+      <module fileurl="file://$PROJECT_DIR$/greendaogenerator/greendaogenerator.iml" filepath="$PROJECT_DIR$/greendaogenerator/greendaogenerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mobile_temperature_logger.iml" filepath="$PROJECT_DIR$/mobile_temperature_logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/petunia/petunia.iml" filepath="$PROJECT_DIR$/petunia/petunia.iml" />
+    </modules>
+  </component>
+</project>

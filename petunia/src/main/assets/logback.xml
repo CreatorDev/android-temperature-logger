@@ -1,0 +1,13 @@
+<configuration>
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.imgtec.flow.core.common.impl.CursorImpl" level="OFF"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="logcat" />
+    </root>
+</configuration>
