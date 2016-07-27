@@ -13,40 +13,23 @@
  * WD4 8LZ, U.K.
  */
 
-package com.imgtec.creator.petunia.data;
+package com.imgtec.creator.petunia.data.api.requests;
 
-import java.util.Date;
+import com.imgtec.creator.petunia.data.api.pojo.Hateoas;
+
+import okhttp3.Request;
 
 /**
  *
  */
-public class Measurement {
+public class GetRequest<T extends Hateoas> extends BaseRequest<T> {
 
-  public static final int TYPE = 0;
-  private final String sensorId;
-  private final float value;
-  private final Date timestamp;
-
-  public Measurement(String sensorId, float value, Date timestamp) {
-    super();
-    this.sensorId = sensorId;
-    this.value = value;
-    this.timestamp = timestamp;
+  public GetRequest(String url) {
+    super(url);
   }
 
-  public String getSensorId() {
-    return sensorId;
-  }
-
-  public float getValue() {
-    return value;
-  }
-
-  public int getType() {
-    return TYPE;
-  }
-
-  public Date getTimestamp() {
-    return timestamp;
+  @Override
+  public Request prepareRequest() {
+    return new Request.Builder().url(getUrl()).get().build();
   }
 }

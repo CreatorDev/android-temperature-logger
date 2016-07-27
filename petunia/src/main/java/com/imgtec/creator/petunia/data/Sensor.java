@@ -21,12 +21,37 @@ package com.imgtec.creator.petunia.data;
 public class Sensor {
 
   private final String id;
+  private final String name;
 
-  public Sensor(String id) {
+  public Sensor(String id, String name) {
     this.id = id;
+    this.name = name;
   }
 
   public String getId() {
     return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Sensor sensor = (Sensor) o;
+
+    if (id != null ? !id.equals(sensor.id) : sensor.id != null) return false;
+    return name != null ? name.equals(sensor.name) : sensor.name == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = id != null ? id.hashCode() : 0;
+    result = 31 * result + (name != null ? name.hashCode() : 0);
+    return result;
   }
 }

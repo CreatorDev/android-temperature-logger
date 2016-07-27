@@ -18,6 +18,8 @@ package com.imgtec.creator.petunia.data.api;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
 
+import java.io.IOException;
+
 /**
  *
  */
@@ -28,6 +30,6 @@ public interface ApiService {
     boolean accept(final Client client);
   }
 
-  Clients getClients(Filter<Client> filter);
+  Clients getClients(Filter<Client> filter) throws IOException;
 
 }

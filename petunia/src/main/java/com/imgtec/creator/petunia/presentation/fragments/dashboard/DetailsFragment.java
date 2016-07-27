@@ -125,7 +125,7 @@ public class DetailsFragment extends BaseChartFragment {
       final String x = dateFormat.format(m.getTimestamp());
       xVals.add(x);
       try {
-        float y = format.parse(m.getValue()).floatValue();
+        float y = format.parse(String.valueOf(m.getValue())).floatValue();
         yVals.add(new Entry(y, i));
       } catch (ParseException e) {
         e.printStackTrace();
@@ -174,8 +174,8 @@ public class DetailsFragment extends BaseChartFragment {
       BaseChartFragment f = fragment.get();
       if (f != null) {
         Toast.makeText(f.getContext(),
-            String.format("Requesting measurements for sensors %s failed!", param.getId()),
-            Toast.LENGTH_LONG).show();
+            String.format("Requesting measurements for sensors %s failed!" + t.getMessage(),
+                param.getId()),  Toast.LENGTH_LONG).show();
       }
     }
   }

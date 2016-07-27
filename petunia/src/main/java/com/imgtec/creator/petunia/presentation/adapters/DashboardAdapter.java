@@ -82,8 +82,8 @@ public class DashboardAdapter extends BaseAdapter<DashboardItem, DashboardAdapte
       return valueTV;
     }
 
-    public void setValue(String value) {
-      valueTV.setText(df.format(Float.parseFloat(value)));
+    public void setValue(float value) {
+      valueTV.setText(df.format(value));
     }
 
     public void setTitle(String title) {

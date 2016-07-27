@@ -123,7 +123,7 @@ public class HistoryFragment extends BaseChartFragment {
           continue;
         }
         try {
-          float y = format.parse(m.getValue()).floatValue();
+          float y = format.parse(String.valueOf(m.getValue())).floatValue();
           if (yVals.get(m.getSensorId()) == null)
             continue;
           yVals.get(m.getSensorId()).add(new Entry(y, relativeIndex));

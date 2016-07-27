@@ -61,7 +61,7 @@ public class ApiModule {
 
   @Provides @PerApp
   HttpUrl provideBaseUrl() {
-    return HttpUrl.parse("https://deviceserver.flowcloud.systems/");
+    return HttpUrl.parse("http://kiwano.herokuapp.com/api/v1/");
   }
 
   @Provides @PerApp
@@ -74,7 +74,8 @@ public class ApiModule {
   @Provides @PerApp
   ApiService provideApiService(final Context appContext,
                                final HttpUrl url,
+                               final OkHttpClient client,
                                final ExecutorService executorService) {
-    return new ApiServiceImpl(appContext, url, executorService);
+    return new ApiServiceImpl(appContext, url, client, executorService);
   }
 }
