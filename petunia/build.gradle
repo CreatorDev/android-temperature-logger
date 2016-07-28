@@ -103,7 +103,6 @@ dependencies {
 
     compile petuniaDependencies.recyclerView
     compile petuniaDependencies.cardView
-    compile petuniaDependencies.greenDao
     compile petuniaDependencies.mpAndroidCharts
 
     compile petuniaDependencies.butterKnife
