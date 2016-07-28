@@ -17,19 +17,21 @@ package com.imgtec.creator.petunia.data.api;
 
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
+import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  *
  */
 public interface ApiService {
 
-
   interface Filter<T> {
     boolean accept(final Client client);
   }
 
   Clients getClients(Filter<Client> filter) throws IOException;
+  Measurements getMeasurements(String clientId, Date from, Date to) throws IOException;
 
 }

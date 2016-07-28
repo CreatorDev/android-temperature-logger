@@ -17,12 +17,15 @@ package com.imgtec.creator.petunia.data.api;
 
 import android.content.Context;
 
+import com.google.gson.GsonBuilder;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
+import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 import com.imgtec.creator.petunia.data.api.requests.GetRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -68,4 +71,195 @@ public class ApiServiceImpl implements ApiService {
     }
     return clients;
   }
+
+  @Override
+  public Measurements getMeasurements(final String clientId, Date from, Date to) throws IOException {
+
+    Clients clients = getClients(new Filter<Client>() {
+      @Override
+      public boolean accept(Client client) {
+        return client.getData().get(0).getId().equals(clientId);
+      }
+    });
+
+    final Client client = clients.getItems().get(0);
+
+    //FIXME: dummy implementation
+    Measurements measurements = new GsonBuilder()
+        .create()
+        .fromJson(MEASUREMENTS, Measurements.class);
+
+    return measurements;
+  }
+
+  static final String MEASUREMENTS = "{\n" +
+      "   \"PageInfo\":{\n" +
+      "      \"TotalCount\":1000,\n" +
+      "      \"ItemsCount\":100,\n" +
+      "      \"StartIndex\":0\n" +
+      "   },\n" +
+      "   \"Items\":[\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-15T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-15T09:27:21.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-15T09:28:22.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-15T09:29:23.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-15T09:30:24.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-15T09:31:25.907Z\"\n" +
+      "      },\n" +
+
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-16T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-17T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-18T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-19T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-20T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-21T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-22T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-23T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-24T09:26:20.907Z\"\n" +
+      "      },\n" +
+      "      {\n" +
+      "         \"Links\":[\n" +
+      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
+      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
+      "         ],\n" +
+      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
+      "         \"value\":\"20.5\",\n" +
+      "         \"timestamp\":\"2016-07-25T09:26:20.907Z\"\n" +
+      "      }\n" +
+      "   ]\n" +
+      "}";
 }
