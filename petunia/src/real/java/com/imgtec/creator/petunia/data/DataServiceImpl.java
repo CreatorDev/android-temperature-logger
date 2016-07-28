@@ -22,6 +22,7 @@ import com.imgtec.creator.petunia.data.api.ApiService;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
 import com.imgtec.creator.petunia.data.api.pojo.Data;
+import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,14 +134,49 @@ public class DataServiceImpl implements DataService {
     executor.execute(new Runnable() {
       @Override
       public void run() {
-        //TODO: implement
 
-        mainHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callback.onFailure(DataServiceImpl.this, sensor, new IllegalStateException("Not yet implemented"));
+        try {
+          final Measurements measurements = apiService.getMeasurements(sensor.getId(), from, to);
+          final List<Measurement> measurementList = new ArrayList<>();
+          if (measurements.getMeasurements().size() > 0) {
+            Measurement lastMeasurement = new Measurement(sensor.getId(),
+                Float.parseFloat(measurements.getMeasurements().get(0).getValue()),
+                dateFormatter.parse(measurements.getMeasurements().get(0).getTimestamp()));
+
+            measurementList.add(lastMeasurement);
+
+            for (com.imgtec.creator.petunia.data.api.pojo.Measurement m : measurements.getMeasurements()) {
+              Date date = dateFormatter.parse(m.getTimestamp());
+              if (Math.abs(lastMeasurement.getTimestamp().getTime() - date.getTime()) >= interval * 1000) {
+
+                Measurement measurement = new Measurement(sensor.getId(),
+                    Float.parseFloat(m.getValue()), dateFormatter.parse(m.getTimestamp()));
+                measurementList.add(measurement);
+                lastMeasurement = measurement;
+              }
+            }
           }
-        });
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onSuccess(DataServiceImpl.this, sensor, measurementList);
+            }
+          });
+        }
+        catch (Exception e) {
+          logger.warn("Requesting measurements for sensor: {} -> <{}, {}> failed!",
+              sensor.getId(), from, to, e);
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onFailure(DataServiceImpl.this, sensor, new IllegalStateException("Not yet implemented"));
+            }
+          });
+
+        }
+
       }
     });
   }
