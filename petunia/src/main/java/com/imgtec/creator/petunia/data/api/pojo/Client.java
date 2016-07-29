@@ -18,33 +18,18 @@ package com.imgtec.creator.petunia.data.api.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Client extends Hateoas {
 
   @SerializedName("data")
   @Expose
-  private List<Data> data = new ArrayList<>();
+  private ClientData data;
 
-  @SerializedName("links")
-  @Expose
-  private List<Link> links = new ArrayList<>();
-
-
-  public List<Data> getData() {
+  public ClientData getData() {
     return data;
   }
 
-  public void setData(List<Data> data) {
+  public void setData(ClientData data) {
     this.data = data;
   }
 
-  public List<Link> getLinks() {
-    return links;
-  }
-
-  public void setLinks(List<Link> links) {
-    this.links = links;
-  }
 }

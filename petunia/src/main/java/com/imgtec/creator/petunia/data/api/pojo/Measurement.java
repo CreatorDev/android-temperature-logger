@@ -23,39 +23,16 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Measurement extends Hateoas {
-  @SerializedName("id")
+
+  @SerializedName("data")
   @Expose
-  private String id;
+  private MeasurementData data;
 
-  @SerializedName("value")
-  @Expose
-  private String value;
-
-  @SerializedName("timestamp")
-  @Expose
-  private String timestamp;
-
-  public String getId() {
-    return id;
+  public MeasurementData getData() {
+    return data;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  public String getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(String timestamp) {
-    this.timestamp = timestamp;
+  public void setData(MeasurementData data) {
+    this.data = data;
   }
 }

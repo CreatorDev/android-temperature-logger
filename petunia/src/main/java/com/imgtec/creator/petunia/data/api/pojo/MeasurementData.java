@@ -18,18 +18,45 @@ package com.imgtec.creator.petunia.data.api.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Item extends Hateoas {
+/**
+ *
+ */
 
-  @SerializedName("Name")
+public class MeasurementData {
+
+  @SerializedName("_id")
   @Expose
-  private String name;
+  private String id;
 
-  public String getName() {
-    return name;
+  @SerializedName("data")
+  @Expose
+  private String value;
+
+  @SerializedName("timestamp")
+  @Expose
+  private String timestamp;
+
+  public String getId() {
+    return id;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setId(String id) {
+    this.id = id;
   }
 
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  public String getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(String timestamp) {
+    this.timestamp = timestamp;
+  }
 }

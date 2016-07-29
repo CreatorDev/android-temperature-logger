@@ -22,7 +22,7 @@ import com.google.gson.annotations.SerializedName;
  *
  */
 
-public class Data {
+public class ClientData {
 
     @SerializedName("_id")
     @Expose
