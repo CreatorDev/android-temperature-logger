@@ -21,12 +21,14 @@ import com.google.gson.GsonBuilder;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
 import com.imgtec.creator.petunia.data.api.pojo.Measurements;
+import com.imgtec.creator.petunia.data.api.requests.GetData;
 import com.imgtec.creator.petunia.data.api.requests.GetRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
@@ -39,10 +41,17 @@ import okhttp3.OkHttpClient;
  */
 public class ApiServiceImpl implements ApiService {
 
+  private static final java.text.SimpleDateFormat dateFormatter =
+      new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
   final Context appContext;
   final HttpUrl url;
   final OkHttpClient client;
   final ExecutorService executorService;
+
+  static {
+    dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+  }
 
   @Inject
   ApiServiceImpl(final Context appContext, final HttpUrl url, final OkHttpClient client,
@@ -78,14 +87,19 @@ public class ApiServiceImpl implements ApiService {
     Clients clients = getClients(new Filter<Client>() {
       @Override
       public boolean accept(Client client) {
-        return client.getData().get(0).getId().equals(clientId);
+        return client.getData().getId().equals(clientId);
       }
     });
 
-    final Client client = clients.getItems().get(0);
+    final Client c = clients.getItems().get(0);
+    Measurements measurements;
+
+//    String url = "http://kiwano.herokuapp.com" + c.getLinkByRel("data").getHref();
+//    Measurements measurements = new GetData(url,
+//        dateFormatter.format(from), dateFormatter.format(to)).execute(client, Measurements.class);
 
     //FIXME: dummy implementation
-    Measurements measurements = new GsonBuilder()
+    measurements = new GsonBuilder()
         .create()
         .fromJson(MEASUREMENTS, Measurements.class);
 
@@ -99,167 +113,213 @@ public class ApiServiceImpl implements ApiService {
       "      \"StartIndex\":0\n" +
       "   },\n" +
       "   \"Items\":[\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-15T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-15T09:27:21.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-15T09:28:22.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-15T09:29:23.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-15T09:30:24.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-15T09:31:25.907Z\"\n" +
-      "      },\n" +
+      "   { " +
+      "     \"data\": {\n" +
+      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+      "            \"data\": \"17\",\n" +
+      "            \"timestamp\": \"2016-07-29T08:56:50.509Z\"\n" +
+      "        },\n" +
+      "        \"links\": [{\n" +
+      "            \"rel\": \"self\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"update\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"remove\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }]" +
+      "   },\n" +
+      "   { " +
+      "     \"data\": {\n" +
+      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+      "            \"data\": \"17\",\n" +
+      "            \"timestamp\": \"2016-07-29T08:57:51.509Z\"\n" +
+      "        },\n" +
+      "        \"links\": [{\n" +
+      "            \"rel\": \"self\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"update\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"remove\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }]" +
+      "   },\n" +
+      "   { " +
+      "     \"data\": {\n" +
+      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+      "            \"data\": \"17\",\n" +
+      "            \"timestamp\": \"2016-07-29T08:58:52.509Z\"\n" +
+      "        },\n" +
+      "        \"links\": [{\n" +
+      "            \"rel\": \"self\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"update\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"remove\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }]" +
+      "   },\n" +
+      "   { " +
+      "     \"data\": {\n" +
+      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+      "            \"data\": \"17\",\n" +
+      "            \"timestamp\": \"2016-07-29T08:59:53.509Z\"\n" +
+      "        },\n" +
+      "        \"links\": [{\n" +
+      "            \"rel\": \"self\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"update\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }, {\n" +
+      "            \"rel\": \"remove\",\n" +
+      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+      "        }]" +
+      "   }, \n" +
 
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-16T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-17T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-18T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-19T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-20T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-21T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-22T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-23T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-24T09:26:20.907Z\"\n" +
-      "      },\n" +
-      "      {\n" +
-      "         \"Links\":[\n" +
-      "            {\t\"rel\":\"self\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"update\", \"href\":\"/clients/{clientId}/data/{id}\" },\n" +
-      "            {   \"rel\":\"remove\", \"href\":\"/clients/{clientId}/data/{id}\" }\n" +
-      "         ],\n" +
-      "         \"id\":\"577d083a0b073b294d34d546\",\n" +
-      "         \"value\":\"20.5\",\n" +
-      "         \"timestamp\":\"2016-07-25T09:26:20.907Z\"\n" +
-      "      }\n" +
-      "   ]\n" +
-      "}";
+      "  { " +
+          "     \"data\": {\n" +
+              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+              "            \"data\": \"17\",\n" +
+              "            \"timestamp\": \"2016-07-29T09:00:04.509Z\"\n" +
+              "        },\n" +
+              "        \"links\": [{\n" +
+              "            \"rel\": \"self\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"update\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"remove\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }]" +
+              "   },\n" +
+              "   { " +
+              "     \"data\": {\n" +
+              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+              "            \"data\": \"17\",\n" +
+              "            \"timestamp\": \"2016-07-29T09:01:05.509Z\"\n" +
+              "        },\n" +
+              "        \"links\": [{\n" +
+              "            \"rel\": \"self\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"update\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"remove\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }]" +
+              "   },\n" +
+              "   { " +
+              "     \"data\": {\n" +
+              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+              "            \"data\": \"17\",\n" +
+              "            \"timestamp\": \"2016-07-29T09:02:06.509Z\"\n" +
+              "        },\n" +
+              "        \"links\": [{\n" +
+              "            \"rel\": \"self\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"update\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"remove\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }]" +
+              "   },\n" +
+              "   { " +
+              "     \"data\": {\n" +
+              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+              "            \"data\": \"17\",\n" +
+              "            \"timestamp\": \"2016-07-29T09:03:07.509Z\"\n" +
+              "        },\n" +
+              "        \"links\": [{\n" +
+              "            \"rel\": \"self\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"update\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }, {\n" +
+              "            \"rel\": \"remove\",\n" +
+              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+              "        }]" +
+              "   }, \n" +
+
+      "        { " +
+                  "     \"data\": {\n" +
+                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+                      "            \"data\": \"17\",\n" +
+                      "            \"timestamp\": \"2016-07-30T08:56:50.509Z\"\n" +
+                      "        },\n" +
+                      "        \"links\": [{\n" +
+                      "            \"rel\": \"self\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"update\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"remove\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }]" +
+                      "   },\n" +
+                      "   { " +
+                      "     \"data\": {\n" +
+                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+                      "            \"data\": \"17\",\n" +
+                      "            \"timestamp\": \"2016-07-31T08:56:50.509Z\"\n" +
+                      "        },\n" +
+                      "        \"links\": [{\n" +
+                      "            \"rel\": \"self\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"update\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"remove\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }]" +
+                      "   },\n" +
+                      "   { " +
+                      "     \"data\": {\n" +
+                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+                      "            \"data\": \"17\",\n" +
+                      "            \"timestamp\": \"2016-08-01T08:56:50.509Z\"\n" +
+                      "        },\n" +
+                      "        \"links\": [{\n" +
+                      "            \"rel\": \"self\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"update\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"remove\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }]" +
+                      "   },\n" +
+                      "   { " +
+                      "     \"data\": {\n" +
+                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
+                      "            \"data\": \"17\",\n" +
+                      "            \"timestamp\": \"2016-08-02T08:56:50.509Z\"\n" +
+                      "        },\n" +
+                      "        \"links\": [{\n" +
+                      "            \"rel\": \"self\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"update\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }, {\n" +
+                      "            \"rel\": \"remove\",\n" +
+                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
+                      "        }]" +
+                      "   } \n" +
+
+                      "   ]\n" +
+                      "}";
 }

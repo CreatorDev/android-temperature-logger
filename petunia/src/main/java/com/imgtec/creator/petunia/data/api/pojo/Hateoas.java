@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class Hateoas {
 
-  @SerializedName("Links")
+  @SerializedName("links")
   @Expose
   private List<Link> links = new ArrayList<Link>();
 

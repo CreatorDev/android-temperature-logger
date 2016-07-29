@@ -21,7 +21,7 @@ import android.os.Handler;
 import com.imgtec.creator.petunia.data.api.ApiService;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
-import com.imgtec.creator.petunia.data.api.pojo.Data;
+import com.imgtec.creator.petunia.data.api.pojo.ClientData;
 import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 
 import org.slf4j.Logger;
@@ -81,7 +81,7 @@ public class DataServiceImpl implements DataService {
 
           final List<Sensor> sensors = new ArrayList<>(clients.getItems().size());
           for (Client c: clients.getItems()) {
-            final Data data = c.getData().get(0); //FIXME: refactor JSON structure
+            final ClientData data = c.getData(); //FIXME: refactor JSON structure
             final Sensor sensor = new Sensor(data.getId(), data.getClientName());
             final Measurement m = new Measurement(sensor.getId(),
                                                   Float.parseFloat(data.getData()),
@@ -140,17 +140,19 @@ public class DataServiceImpl implements DataService {
           final List<Measurement> measurementList = new ArrayList<>();
           if (measurements.getMeasurements().size() > 0) {
             Measurement lastMeasurement = new Measurement(sensor.getId(),
-                Float.parseFloat(measurements.getMeasurements().get(0).getValue()),
-                dateFormatter.parse(measurements.getMeasurements().get(0).getTimestamp()));
+                Float.parseFloat(measurements.getMeasurements().get(0).getData().getValue()),
+                dateFormatter.parse(measurements.getMeasurements().get(0).getData().getTimestamp()));
 
             measurementList.add(lastMeasurement);
 
             for (com.imgtec.creator.petunia.data.api.pojo.Measurement m : measurements.getMeasurements()) {
-              Date date = dateFormatter.parse(m.getTimestamp());
+              Date date = dateFormatter.parse(m.getData().getTimestamp());
               if (Math.abs(lastMeasurement.getTimestamp().getTime() - date.getTime()) >= interval * 1000) {
 
                 Measurement measurement = new Measurement(sensor.getId(),
-                    Float.parseFloat(m.getValue()), dateFormatter.parse(m.getTimestamp()));
+                    Float.parseFloat(m.getData().getValue()),
+                    dateFormatter.parse(m.getData().getTimestamp()));
+
                 measurementList.add(measurement);
                 lastMeasurement = measurement;
               }
