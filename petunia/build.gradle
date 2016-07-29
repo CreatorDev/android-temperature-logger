@@ -69,6 +69,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+
+                output.outputFile = new File(
+                        output.outputFile.parent,
+                        output.outputFile.name.replace("petunia",
+                                "project4-${variant.versionName}")
+                )
+            }
+        }
     }
 
     productFlavors {
