@@ -17,6 +17,7 @@ package com.imgtec.creator.petunia.data.api;
 
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
+import com.imgtec.creator.petunia.data.api.pojo.Delta;
 import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 
 import java.io.IOException;
@@ -32,6 +33,10 @@ public interface ApiService {
   }
 
   Clients getClients(Filter<Client> filter) throws IOException;
+
   Measurements getMeasurements(String clientId, Date from, Date to) throws IOException;
 
+  Delta getDelta(String clientId) throws IOException;
+
+  void setDelta(String clientId, double delta) throws IOException;
 }
