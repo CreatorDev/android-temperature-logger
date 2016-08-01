@@ -20,9 +20,11 @@ import android.content.Context;
 import com.google.gson.GsonBuilder;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
+import com.imgtec.creator.petunia.data.api.pojo.Delta;
 import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 import com.imgtec.creator.petunia.data.api.requests.GetData;
 import com.imgtec.creator.petunia.data.api.requests.GetRequest;
+import com.imgtec.creator.petunia.data.api.requests.UpdateDelta;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class ApiServiceImpl implements ApiService {
   }
 
   @Override
-  public Clients getClients(Filter<Client> filter) throws IOException {
+  public final Clients getClients(Filter<Client> filter) throws IOException {
 
     final String urlString = url.toString()+"clients";  //FIXME: should be taken from API via 'rel = clients'
 
@@ -104,6 +106,34 @@ public class ApiServiceImpl implements ApiService {
         .fromJson(MEASUREMENTS, Measurements.class);
 
     return measurements;
+  }
+
+
+  public Delta getDelta(final String clientId) throws IOException {
+    Clients clients = getClients(new Filter<Client>() {
+      @Override
+      public boolean accept(Client client) {
+        return client.getData().getId().equals(clientId);
+      }
+    });
+
+    final Client c = clients.getItems().get(0);
+    //FIXME: get url from 'rel'
+    final String urlString = "http://kiwano.herokuapp.com" + c.getLinkByRel("delta").getHref();
+    return new GetRequest<Delta>(urlString).execute(client, Delta.class);
+  }
+
+  public void setDelta(final String clientId, final double delta) throws IOException {
+
+    Clients clients = getClients(new Filter<Client>() {
+      @Override
+      public boolean accept(Client client) {
+        return client.getData().getId().equals(clientId);
+      }
+    });
+    final Client c = clients.getItems().get(0);
+    final String urlString = "http://kiwano.herokuapp.com" + c.getLinkByRel("delta").getHref();
+    new UpdateDelta(urlString, delta, dateFormatter.format(new Date())).execute(client, Delta.class);
   }
 
   static final String MEASUREMENTS = "{\n" +
