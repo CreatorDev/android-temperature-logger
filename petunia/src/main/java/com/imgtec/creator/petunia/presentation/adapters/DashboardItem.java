@@ -57,6 +57,10 @@ public class DashboardItem implements Serializable {
     return measurement.getValue();
   }
 
+  public String getDelta() {
+    return sensor.getDelta();
+  }
+
   public int getType() {
     return measurement.getType();
   }

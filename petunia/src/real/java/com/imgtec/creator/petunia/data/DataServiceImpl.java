@@ -43,6 +43,7 @@ import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -98,7 +99,7 @@ public class DataServiceImpl implements DataService {
           final List<Sensor> sensors = new ArrayList<>(clients.getItems().size());
           for (Client c: clients.getItems()) {
             final ClientData data = c.getData(); //FIXME: refactor JSON structure
-            final Sensor sensor = new Sensor(data.getId(), data.getClientName());
+            final Sensor sensor = new Sensor(data.getId(), data.getClientName(), data.getDelta());
             final Measurement m = new Measurement(sensor.getId(),
                                                   Float.parseFloat(data.getData()),
                                                   dateFormatter.parse(data.getTimestamp()));
@@ -121,7 +122,7 @@ public class DataServiceImpl implements DataService {
           mainHandler.post(new Runnable() {
             @Override
             public void run() {
-              callback.onFailure(DataServiceImpl.this, new IllegalStateException("Not yet implemented"));
+              callback.onFailure(DataServiceImpl.this, e);
             }
           });
         }
@@ -182,14 +183,14 @@ public class DataServiceImpl implements DataService {
             }
           });
         }
-        catch (Exception e) {
+        catch (final Exception e) {
           logger.warn("Requesting measurements for sensor: {} -> <{}, {}> failed!",
               sensor.getId(), from, to, e);
 
           mainHandler.post(new Runnable() {
             @Override
             public void run() {
-              callback.onFailure(DataServiceImpl.this, sensor, new IllegalStateException("Not yet implemented"));
+              callback.onFailure(DataServiceImpl.this, sensor, e);
             }
           });
 
@@ -205,6 +206,35 @@ public class DataServiceImpl implements DataService {
 
   }
 
+  @Override
+  public void setDelta(final Sensor sensor, final float delta, final DataCallback<Sensor> callback) {
+
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          apiService.setDelta(sensor.getId(), delta);
+
+          sensor.setDelta(String.valueOf(delta));
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onSuccess(DataServiceImpl.this, sensor);
+            }
+          });
+        } catch (final Exception e) {
+          logger.warn("Setting delta {} for sensor {} failed", delta, sensor.getId(), e);
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onFailure(DataServiceImpl.this, e);
+            }
+          });
+        }
+      }
+    });
+  }
 
 
   public static class Builder {

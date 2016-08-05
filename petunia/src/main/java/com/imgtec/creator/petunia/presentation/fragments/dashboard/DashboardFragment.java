@@ -32,14 +32,17 @@
 package com.imgtec.creator.petunia.presentation.fragments.dashboard;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.transition.Explode;
 import android.transition.Slide;
 import android.transition.Transition;
@@ -49,6 +52,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.imgtec.creator.petunia.R;
@@ -79,7 +83,8 @@ import butterknife.OnClick;
 /**
  *
  */
-public class DashboardFragment extends BaseFragment {
+public class DashboardFragment extends BaseFragment implements ChangeSensorDeltaListener {
+
 
   final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -118,7 +123,7 @@ public class DashboardFragment extends BaseFragment {
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    adapter = new DashboardAdapter();
+    adapter = new DashboardAdapter(this);
 
     GridLayoutManager gridLayoutManager = new DashboardGridLayoutManager(getContext(),
         getResources().getInteger(R.integer.dashboard_columns_count));
@@ -193,6 +198,34 @@ public class DashboardFragment extends BaseFragment {
     }
   }
 
+  @Override
+  public void onChangeDeltaSelected(final DashboardItem item) {
+    final EditText editText = new EditText(getActivity());
+    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+    editText.setText(item.getDelta());
+    new AlertDialog.Builder(getActivity())
+        .setTitle("Set new delta for sensor:" + item.getSensor().getName())
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            final String delta = editText.getText().toString();
+            //TODO: verify delta
+
+            dataService.setDelta(item.getSensor(), Float.parseFloat(delta),
+                new SetDeltaCallback(DashboardFragment.this));
+          }
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        })
+        .setView(editText)
+        .show();
+  }
+
+
   private static class SensorsCallback implements DataService.DataCallback<List<Sensor>> {
 
     final WeakReference<DashboardFragment> fragment;
@@ -223,7 +256,35 @@ public class DashboardFragment extends BaseFragment {
       DashboardFragment f = fragment.get();
       if (f != null) {
         Toast.makeText(f.getContext(),
-            String.format("Requesting sensors failed! {}", t.getMessage()),
+            String.format("Requesting sensors failed! %s", t.getMessage()),
+            Toast.LENGTH_LONG).show();
+      }
+    }
+  }
+
+  private static class SetDeltaCallback implements  DataService.DataCallback<Sensor> {
+
+    final WeakReference<DashboardFragment> fragment;
+
+    public SetDeltaCallback(DashboardFragment fragment) {
+      super();
+      this.fragment = new WeakReference<>(fragment);
+    }
+
+    @Override
+    public void onSuccess(DataService service, Sensor result) {
+      DashboardFragment f = fragment.get();
+      if (f != null) {
+        f.adapter.notifyDataSetChanged();
+      }
+    }
+
+    @Override
+    public void onFailure(DataService service, Throwable t) {
+      DashboardFragment f = fragment.get();
+      if (f != null) {
+        Toast.makeText(f.getContext(),
+            String.format("Setting delta failed! %s", t.getMessage()),
             Toast.LENGTH_LONG).show();
       }
     }

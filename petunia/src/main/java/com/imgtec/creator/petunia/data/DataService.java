@@ -59,4 +59,6 @@ public interface DataService {
 
   void requestMeasurements(Date from, Date to, long interval,
                            DataCallback2<List<Sensor>, List<Measurement>> callback);
+
+  void setDelta(Sensor sensor, float delta, DataCallback<Sensor> callback);
 }
