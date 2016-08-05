@@ -79,8 +79,35 @@
                 android:layout_height="wrap_content"
                 style="@style/DashboardItemUnit"
                 android:layout_gravity="top"
-                tools:text="\u2103"/>
+                android:text="\u2103"/>
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/deltaTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="@string/delta"/>
+
+        <TextView
+            android:id="@+id/delta"
+            android:layout_toRightOf="@id/deltaTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:text="0.5"/>
+
+        <ImageButton
+            android:id="@+id/edit_delta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_mode_edit_black_24dp"
+            android:tint="@color/primary_color_purple"/>
 
     </RelativeLayout>
 </com.imgtec.creator.petunia.presentation.views.DashboardItemView>

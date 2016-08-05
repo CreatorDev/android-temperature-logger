@@ -63,7 +63,7 @@ public class FakeDataService implements DataService {
   List<Sensor> generateDummySensors(final int count) {
     final List<Sensor> list = new ArrayList<Sensor>(count);
     for (int i = 0; i < count; ++i) {
-      list.add(new Sensor(""+i, "Sensor " + i));
+      list.add(new Sensor(""+i, "Sensor " + i, "0.5"));
     }
     return list;
   }
@@ -133,6 +133,11 @@ public class FakeDataService implements DataService {
         });
       }
     }, 5, TimeUnit.SECONDS);
+  }
+
+  @Override
+  public void setDelta(Sensor sensor, float delta, DataCallback<Sensor> callback) {
+    //skip
   }
 
   public static class Builder {

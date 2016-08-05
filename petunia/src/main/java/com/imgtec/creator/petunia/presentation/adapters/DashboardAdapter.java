@@ -35,9 +35,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.imgtec.creator.petunia.R;
+import com.imgtec.creator.petunia.presentation.fragments.dashboard.ChangeSensorDeltaListener;
+import com.imgtec.creator.petunia.presentation.fragments.dashboard.DashboardFragment;
 
 import java.text.DecimalFormat;
 
@@ -51,6 +54,12 @@ public class DashboardAdapter extends BaseAdapter<DashboardItem, DashboardAdapte
 
   private static final int NA = 0;
   private static final int TEMP = NA + 1;
+  private final ChangeSensorDeltaListener changeDeltaListener;
+
+  public DashboardAdapter(ChangeSensorDeltaListener listener) {
+    super();
+    this.changeDeltaListener = listener;
+  }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,10 +79,17 @@ public class DashboardAdapter extends BaseAdapter<DashboardItem, DashboardAdapte
     return item.getType();
   }
 
-  private void load(final ViewHolder holder, DashboardItem item, final int position) {
+  private void load(final ViewHolder holder, final DashboardItem item, final int position) {
 
     holder.setTitle(item.getTitle());
     holder.setValue(item.getValue());
+    holder.setDelta(item.getDelta());
+    holder.editDelta.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        changeDeltaListener.onChangeDeltaSelected(item);
+      }
+    });
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,6 +100,8 @@ public class DashboardAdapter extends BaseAdapter<DashboardItem, DashboardAdapte
     @BindView(R.id.value_tv) TextView valueTV;
     @BindView(R.id.unit_tv) TextView unitTV;
     @BindView(R.id.title_tv) TextView titleTV;
+    @BindView(R.id.delta) TextView deltaTV;
+    @BindView(R.id.edit_delta) ImageButton editDelta;
 
     public ViewHolder(View itemView) {
       super(itemView);
@@ -108,6 +126,10 @@ public class DashboardAdapter extends BaseAdapter<DashboardItem, DashboardAdapte
 
     public void setUnit(String unit) {
       unitTV.setText(unit);
+    }
+
+    public void setDelta(String delta) {
+      deltaTV.setText(delta);
     }
   }
 }
