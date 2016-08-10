@@ -110,16 +110,10 @@ public class ApiServiceImpl implements ApiService {
     });
 
     final Client c = clients.getItems().get(0);
-    Measurements measurements;
 
-//    String url = "http://kiwano.herokuapp.com" + c.getLinkByRel("data").getHref();
-//    Measurements measurements = new GetData(url,
-//        dateFormatter.format(from), dateFormatter.format(to)).execute(client, Measurements.class);
-
-    //FIXME: dummy implementation
-    measurements = new GsonBuilder()
-        .create()
-        .fromJson(MEASUREMENTS, Measurements.class);
+    String url =  c.getLinkByRel("data").getHref();
+    Measurements measurements = new GetData(url,
+        dateFormatter.format(from), dateFormatter.format(to)).execute(client, Measurements.class);
 
     return measurements;
   }
@@ -134,9 +128,7 @@ public class ApiServiceImpl implements ApiService {
     });
 
     final Client c = clients.getItems().get(0);
-    //FIXME: get url from 'rel'
-    final String urlString = "http://kiwano.herokuapp.com" + c.getLinkByRel("delta").getHref();
-    return new GetRequest<Delta>(urlString).execute(client, Delta.class);
+    return new GetRequest<Delta>(c.getLinkByRel("delta").getHref()).execute(client, Delta.class);
   }
 
   public void setDelta(final String clientId, final double delta) throws IOException {
@@ -148,224 +140,6 @@ public class ApiServiceImpl implements ApiService {
       }
     });
     final Client c = clients.getItems().get(0);
-    final String urlString = "http://kiwano.herokuapp.com" + c.getLinkByRel("delta").getHref();
-    new UpdateDelta(urlString, delta, dateFormatter.format(new Date())).execute(client, Delta.class);
+    new UpdateDelta(c.getLinkByRel("delta").getHref(), delta, dateFormatter.format(new Date())).execute(client, Delta.class);
   }
-
-  static final String MEASUREMENTS = "{\n" +
-      "   \"PageInfo\":{\n" +
-      "      \"TotalCount\":1000,\n" +
-      "      \"ItemsCount\":100,\n" +
-      "      \"StartIndex\":0\n" +
-      "   },\n" +
-      "   \"Items\":[\n" +
-      "   { " +
-      "     \"data\": {\n" +
-      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-      "            \"data\": \"17\",\n" +
-      "            \"timestamp\": \"2016-07-29T08:56:50.509Z\"\n" +
-      "        },\n" +
-      "        \"links\": [{\n" +
-      "            \"rel\": \"self\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"update\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"remove\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }]" +
-      "   },\n" +
-      "   { " +
-      "     \"data\": {\n" +
-      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-      "            \"data\": \"17\",\n" +
-      "            \"timestamp\": \"2016-07-29T08:57:51.509Z\"\n" +
-      "        },\n" +
-      "        \"links\": [{\n" +
-      "            \"rel\": \"self\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"update\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"remove\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }]" +
-      "   },\n" +
-      "   { " +
-      "     \"data\": {\n" +
-      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-      "            \"data\": \"17\",\n" +
-      "            \"timestamp\": \"2016-07-29T08:58:52.509Z\"\n" +
-      "        },\n" +
-      "        \"links\": [{\n" +
-      "            \"rel\": \"self\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"update\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"remove\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }]" +
-      "   },\n" +
-      "   { " +
-      "     \"data\": {\n" +
-      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-      "            \"data\": \"17\",\n" +
-      "            \"timestamp\": \"2016-07-29T08:59:53.509Z\"\n" +
-      "        },\n" +
-      "        \"links\": [{\n" +
-      "            \"rel\": \"self\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"update\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }, {\n" +
-      "            \"rel\": \"remove\",\n" +
-      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-      "        }]" +
-      "   }, \n" +
-
-      "  { " +
-          "     \"data\": {\n" +
-              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-              "            \"data\": \"17\",\n" +
-              "            \"timestamp\": \"2016-07-29T09:00:04.509Z\"\n" +
-              "        },\n" +
-              "        \"links\": [{\n" +
-              "            \"rel\": \"self\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"update\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"remove\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }]" +
-              "   },\n" +
-              "   { " +
-              "     \"data\": {\n" +
-              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-              "            \"data\": \"17\",\n" +
-              "            \"timestamp\": \"2016-07-29T09:01:05.509Z\"\n" +
-              "        },\n" +
-              "        \"links\": [{\n" +
-              "            \"rel\": \"self\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"update\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"remove\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }]" +
-              "   },\n" +
-              "   { " +
-              "     \"data\": {\n" +
-              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-              "            \"data\": \"17\",\n" +
-              "            \"timestamp\": \"2016-07-29T09:02:06.509Z\"\n" +
-              "        },\n" +
-              "        \"links\": [{\n" +
-              "            \"rel\": \"self\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"update\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"remove\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }]" +
-              "   },\n" +
-              "   { " +
-              "     \"data\": {\n" +
-              "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-              "            \"data\": \"17\",\n" +
-              "            \"timestamp\": \"2016-07-29T09:03:07.509Z\"\n" +
-              "        },\n" +
-              "        \"links\": [{\n" +
-              "            \"rel\": \"self\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"update\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }, {\n" +
-              "            \"rel\": \"remove\",\n" +
-              "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-              "        }]" +
-              "   }, \n" +
-
-      "        { " +
-                  "     \"data\": {\n" +
-                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-                      "            \"data\": \"17\",\n" +
-                      "            \"timestamp\": \"2016-07-30T08:56:50.509Z\"\n" +
-                      "        },\n" +
-                      "        \"links\": [{\n" +
-                      "            \"rel\": \"self\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"update\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"remove\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }]" +
-                      "   },\n" +
-                      "   { " +
-                      "     \"data\": {\n" +
-                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-                      "            \"data\": \"17\",\n" +
-                      "            \"timestamp\": \"2016-07-31T08:56:50.509Z\"\n" +
-                      "        },\n" +
-                      "        \"links\": [{\n" +
-                      "            \"rel\": \"self\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"update\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"remove\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }]" +
-                      "   },\n" +
-                      "   { " +
-                      "     \"data\": {\n" +
-                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-                      "            \"data\": \"17\",\n" +
-                      "            \"timestamp\": \"2016-08-01T08:56:50.509Z\"\n" +
-                      "        },\n" +
-                      "        \"links\": [{\n" +
-                      "            \"rel\": \"self\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"update\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"remove\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }]" +
-                      "   },\n" +
-                      "   { " +
-                      "     \"data\": {\n" +
-                      "            \"_id\": \"577d08840b073b294d34d547\",\n" +
-                      "            \"data\": \"17\",\n" +
-                      "            \"timestamp\": \"2016-08-02T08:56:50.509Z\"\n" +
-                      "        },\n" +
-                      "        \"links\": [{\n" +
-                      "            \"rel\": \"self\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"update\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }, {\n" +
-                      "            \"rel\": \"remove\",\n" +
-                      "            \"href\": \"/api/v1/clients/577d08840b073b294d34d547/data\"\n" +
-                      "        }]" +
-                      "   } \n" +
-
-                      "   ]\n" +
-                      "}";
 }
