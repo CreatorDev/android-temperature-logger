@@ -55,4 +55,6 @@ public interface ApiService {
   Delta getDelta(String clientId) throws IOException;
 
   void setDelta(String clientId, double delta) throws IOException;
+
+  void clearAllMeasurements();
 }

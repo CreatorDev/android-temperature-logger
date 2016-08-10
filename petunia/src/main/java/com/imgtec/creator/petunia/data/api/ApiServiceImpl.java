@@ -60,7 +60,7 @@ import okhttp3.OkHttpClient;
 public class ApiServiceImpl implements ApiService {
 
   private static final java.text.SimpleDateFormat dateFormatter =
-      new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+      new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
   final Context appContext;
   final HttpUrl url;
@@ -141,5 +141,11 @@ public class ApiServiceImpl implements ApiService {
     });
     final Client c = clients.getItems().get(0);
     new UpdateDelta(c.getLinkByRel("delta").getHref(), delta, dateFormatter.format(new Date())).execute(client, Delta.class);
+  }
+
+  @Override
+  public void clearAllMeasurements() {
+    //TODO: send request
+    throw new IllegalStateException("Not yet implemented!");
   }
 }

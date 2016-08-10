@@ -36,6 +36,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -50,6 +51,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -187,6 +189,16 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
     inflater.inflate(R.menu.menu_dashboard, menu);
   }
 
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.clear_datastore) {
+
+      dataService.clearAllMeasurements(new ClearAllCallback(this));
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
   @OnClick(R.id.fab)
   @TargetApi(21)
   void onFabClicked() {
@@ -285,6 +297,31 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
       if (f != null) {
         Toast.makeText(f.getContext(),
             String.format("Setting delta failed! %s", t.getMessage()),
+            Toast.LENGTH_LONG).show();
+      }
+    }
+  }
+
+  private static class ClearAllCallback implements DataService.DataCallback<Void> {
+
+    final WeakReference<DashboardFragment> fragment;
+
+    public ClearAllCallback(DashboardFragment fragment) {
+      super();
+      this.fragment = new WeakReference<>(fragment);
+    }
+
+    @Override
+    public void onSuccess(DataService service, Void result) {
+      //TODO: implement
+    }
+
+    @Override
+    public void onFailure(DataService service, Throwable t) {
+      DashboardFragment f = fragment.get();
+      if (f != null) {
+        Toast.makeText(f.getContext(),
+            String.format("Clear all data failed! %s", t.getMessage()),
             Toast.LENGTH_LONG).show();
       }
     }
