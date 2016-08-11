@@ -61,4 +61,6 @@ public interface DataService {
                            DataCallback2<List<Sensor>, List<Measurement>> callback);
 
   void setDelta(Sensor sensor, float delta, DataCallback<Sensor> callback);
+
+  void clearAllMeasurements(DataCallback<Void> callback);
 }

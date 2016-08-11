@@ -43,7 +43,6 @@ import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,7 +59,7 @@ public class DataServiceImpl implements DataService {
 
   final Logger logger = LoggerFactory.getLogger(getClass());
   static final Measurement DUMMY_MEASUREMENT = new Measurement("N/A", 0, new Date());
-  static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+  static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
   final Context context;
   final ScheduledExecutorService executor;
@@ -225,6 +224,34 @@ public class DataServiceImpl implements DataService {
           });
         } catch (final Exception e) {
           logger.warn("Setting delta {} for sensor {} failed", delta, sensor.getId(), e);
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onFailure(DataServiceImpl.this, e);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  @Override
+  public void clearAllMeasurements(final DataCallback<Void> callback) {
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        try {
+
+          apiService.clearAllMeasurements();
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onSuccess(DataServiceImpl.this, null);
+            }
+          });
+        } catch (final Exception e) {
+          logger.warn("Clear all measurements failed!", e);
           mainHandler.post(new Runnable() {
             @Override
             public void run() {

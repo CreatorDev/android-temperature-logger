@@ -140,6 +140,11 @@ public class FakeDataService implements DataService {
     //skip
   }
 
+  @Override
+  public void clearAllMeasurements(DataCallback<Void> callback) {
+    //skip
+  }
+
   public static class Builder {
 
     private Context context;
