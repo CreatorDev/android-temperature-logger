@@ -57,22 +57,13 @@ public class UpdateDelta extends BaseRequest<Delta> {
   @Override
   public Request prepareRequest() {
 
-
-    DeltaData data = new DeltaData();
-    data.setDelta(String.valueOf(delta));
-    data.setTimestamp(timestamp);
-    Delta d = new Delta();
-    d.setData(data);
-
     HttpUrl url = HttpUrl.parse(getUrl());
-
+    String str = String.format("\"delta\": \"%s\"", delta);
     Request.Builder builder = new Request.Builder();
     builder.url(url
         .newBuilder()
         .build())
-        .put(RequestBody.create(
-            MediaType.parse("application/json; charset=utf-8"),
-            new GsonBuilder().create().toJson(d)))
+        .put(RequestBody.create(MediaType.parse("x-www-form-urlencoded"), str))
         .build();
 
     return builder.build();
