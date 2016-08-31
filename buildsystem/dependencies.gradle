@@ -47,32 +47,32 @@ ext {
 
     //Android:
 
-    petuniaCompileSdkVersion = 23
-    petuniaBuildToolsVersion = '23.0.3'
+    petuniaCompileSdkVersion = 24
+    petuniaBuildToolsVersion = '24.0.2'
 
     petuniaApplicationId = 'com.imgtec.creator.project4'
     petuniaTestApplicationId = 'com.imgtec.creator.project4.test'
     petuniaMinSdkVersion = 15
-    petuniaTargetSdkVersion = 23
+    petuniaTargetSdkVersion = 24
     petuniaVersionCode = 1
-    petuniaVersionName = "0.6.0"
+    petuniaVersionName = "1.0.0"
 
 
     //----------------------------------------------------------------------
-    diCompileSdkVersion = 23
-    diBuildToolsVersion = '23.0.3'
+    diCompileSdkVersion = 24
+    diBuildToolsVersion = '24.0.2'
 
     diMinSdkVersion = 15
-    diTargetSdkVersion = 23
+    diTargetSdkVersion = 24
     diVersionCode = 1
     diVersionName = "1.0.0"
     //----------------------------------------------------------------------
 
     //libraries
-    appCompatVersion = '23.3.0'
-    appDesignVersion = '23.3.0'
-    recyclerViewVersion = '23.3.0'
-    cardViewVersion = '23.3.0'
+    appCompatVersion = '24.2.0'
+    appDesignVersion = '24.2.0'
+    recyclerViewVersion = '24.2.0'
+    cardViewVersion = '24.2.0'
 
     butterKnifeVersion = '8.1.0'
 
@@ -83,7 +83,7 @@ ext {
     materialCalendarViewVersion = '1.1.0'
     crashlyticsVersion = '2.5.5@aar'
 
-    daggerVersion = '2.0.2'
+    daggerVersion = '2.5'
     jsr250Version = '1.0'
 
     leakcanaryVersion = '1.3.1'

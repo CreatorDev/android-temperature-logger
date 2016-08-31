@@ -29,25 +29,36 @@
  *
  */
 
-package com.imgtec.creator.petunia.data.api.oauth;
+package com.imgtec.creator.petunia.data.api;
 
 import com.imgtec.di.PerApp;
 
-import dagger.Module;
-import dagger.Provides;
+import java.io.IOException;
 
-@Module
-public class OauthModule {
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
-  @Provides @PerApp
-  OauthTokenWrapper provideOauthTokenWrapper() {
-    return new OauthTokenWrapper();
+/**
+ *
+ */
+@PerApp
+public final class AuthInterceptor implements Interceptor {
+
+  private final String token;
+
+  AuthInterceptor(final String token) {
+    super();
+    this.token = token;
   }
 
-  @Provides @PerApp
-  OauthInterceptor provideOauthInterceptor(OauthTokenWrapper tokenWrapper) {
-    return new OauthInterceptor(tokenWrapper);
-  }
+  @Override public Response intercept(Chain chain) throws IOException {
 
-  //TODO: implement
+    Request request = chain
+        .request()
+        .newBuilder()
+          .addHeader("x-access-token", token)
+        .build();
+    return chain.proceed(request);
+  }
 }

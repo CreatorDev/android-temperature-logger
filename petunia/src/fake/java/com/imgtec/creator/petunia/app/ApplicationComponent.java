@@ -22,8 +22,6 @@ import com.imgtec.creator.petunia.data.DataService;
 import com.imgtec.creator.petunia.data.FakeDataModule;
 import com.imgtec.creator.petunia.data.api.ApiModule;
 import com.imgtec.creator.petunia.data.api.ApiService;
-import com.imgtec.creator.petunia.data.api.oauth.OauthModule;
-import com.imgtec.creator.petunia.data.api.oauth.OauthTokenWrapper;
 import com.imgtec.di.PerApp;
 
 import javax.inject.Named;
@@ -36,7 +34,6 @@ import okhttp3.OkHttpClient;
     modules = {
         ApplicationModule.class,
         FakeDataModule.class,
-        OauthModule.class,
         ApiModule.class
     }
 )
@@ -50,7 +47,6 @@ public interface ApplicationComponent {
       return DaggerApplicationComponent
           .builder()
           .applicationModule(new ApplicationModule(application))
-          .oauthModule(new OauthModule())
           .build();
     }
   }
@@ -66,7 +62,5 @@ public interface ApplicationComponent {
   OkHttpClient getOkHttpClient();
 
   ApiService getApiService();
-
-  OauthTokenWrapper getOauthTokenWrapper();
 }
 

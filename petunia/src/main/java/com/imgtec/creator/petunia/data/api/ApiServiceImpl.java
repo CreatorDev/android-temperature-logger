@@ -140,7 +140,8 @@ public class ApiServiceImpl implements ApiService {
       }
     });
     final Client c = clients.getItems().get(0);
-    new UpdateDelta(c.getLinkByRel("delta").getHref(), delta, dateFormatter.format(new Date())).execute(client, Delta.class);
+    new UpdateDelta(c.getLinkByRel("delta").getHref(), delta, dateFormatter.format(new Date()))
+        .execute(client, Delta.class);
   }
 
   @Override
