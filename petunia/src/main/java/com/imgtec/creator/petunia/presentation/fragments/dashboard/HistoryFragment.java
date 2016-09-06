@@ -202,9 +202,9 @@ public class HistoryFragment extends BaseChartFragment {
     public void onFailure(DataService service, List<Sensor> param, Throwable t) {
       BaseChartFragment f = fragment.get();
       if (f != null) {
-        Toast.makeText(f.getContext(),
-            String.format("Requesting measurements for all sensors failed!"),
-            Toast.LENGTH_LONG).show();
+        Toast.makeText(f.getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+
+        f.showChartView();
       }
     }
   }

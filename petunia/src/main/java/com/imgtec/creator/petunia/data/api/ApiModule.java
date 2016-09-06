@@ -36,11 +36,12 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.imgtec.creator.petunia.app.App;
-import com.imgtec.creator.petunia.data.api.oauth.OauthInterceptor;
 import com.imgtec.di.PerApp;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -56,10 +57,24 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class ApiModule {
 
   private static final long CACHE_DISK_SIZE = 50 * 1024 * 1024;
+  private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUg" +
+      "SldUIEJ1aWxkZXIiLCJpYXQiOjE0Njg0MTQxMDAsImV4cCI6MTQ5OTk1MDEwMCwiYXVkIjoid3d3LmV4YW1wbGUuY" +
+      "29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2" +
+      "NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWl" +
+      "uaXN0cmF0b3IiXX0.KTzci15ZjTlNDbJf93rbovSyX_F-4NINaqh6-Q77nW0";
 
+  @Provides @PerApp @Named("Auth")
+  String provideAuthToken() {
+    return TOKEN;
+  }
 
   @Provides @PerApp
-  OkHttpClient provideOkHttpClient(App app, OauthInterceptor oauthInterceptor) {
+  AuthInterceptor provideAuthInterceptor(@Named("Auth") final String authToken) {
+    return new AuthInterceptor(authToken);
+  }
+
+  @Provides @PerApp
+  OkHttpClient provideOkHttpClient(App app, AuthInterceptor oauthInterceptor) {
     File cacheDir = new File(app.getCacheDir(), "http");
     Cache cache = new Cache(cacheDir, CACHE_DISK_SIZE);
 

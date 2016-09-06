@@ -41,7 +41,6 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
 
-  public static final String GATEWAY = "gateway";
   protected Unbinder unbinder;
 
   @Override

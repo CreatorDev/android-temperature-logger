@@ -200,9 +200,23 @@ public class DataServiceImpl implements DataService {
   }
 
   @Override
-  public void requestMeasurements(Date from, Date to, long interval,
-                                  DataCallback2<List<Sensor>, List<Measurement>> callback) {
+  public void requestMeasurements(final Date from,
+                                  final Date to,
+                                  final long interval,
+                                  final DataCallback2<List<Sensor>, List<Measurement>> callback) {
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+        //TODO: implement
 
+        mainHandler.post(new Runnable() {
+          @Override
+          public void run() {
+            callback.onFailure(DataServiceImpl.this, new ArrayList<Sensor>(), new IllegalStateException("Not yet implemented"));
+          }
+        });
+      }
+    });
   }
 
   @Override
