@@ -29,32 +29,37 @@
  *
  */
 
-package com.imgtec.creator.petunia.data.api;
-
-import com.imgtec.creator.petunia.data.api.pojo.Client;
-import com.imgtec.creator.petunia.data.api.pojo.Clients;
-import com.imgtec.creator.petunia.data.api.pojo.Delta;
-import com.imgtec.creator.petunia.data.api.pojo.Measurements;
+package com.imgtec.creator.petunia.data.api.requests;
 
 import java.io.IOException;
-import java.util.Date;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  *
  */
-public interface ApiService {
+public class DeleteRequest {
 
-  interface Filter<T> {
-    boolean accept(final Client client);
+  private final String url;
+
+  public DeleteRequest(String url) {
+    this.url = url;
   }
 
-  Clients getClients(Filter<Client> filter) throws IOException;
+  public void execute(OkHttpClient client) throws IOException {
+    Request request = prepareRequest();
+    okhttp3.Response response = client.newCall(request).execute();
+    if (!response.isSuccessful()) {
+      throw new RuntimeException("Request failed with code:" + response.code());
+    }
+  }
 
-  Measurements getMeasurements(String clientId, Date from, Date to) throws IOException;
+  private Request prepareRequest() {
+    return new Request.Builder().url(getUrl()).delete().build();
+  }
 
-  Delta getDelta(String clientId) throws IOException;
-
-  void setDelta(String clientId, double delta) throws IOException;
-
-  void clearAllMeasurements() throws IOException;
+  public String getUrl() {
+    return url;
+  }
 }

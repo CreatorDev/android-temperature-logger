@@ -313,7 +313,12 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
 
     @Override
     public void onSuccess(DataService service, Void result) {
-      //TODO: implement
+      DashboardFragment f = fragment.get();
+      if (f != null) {
+        Toast.makeText(f.getContext(),
+            String.format("Removing all measurements finished successfully"),
+            Toast.LENGTH_LONG).show();
+      }
     }
 
     @Override
