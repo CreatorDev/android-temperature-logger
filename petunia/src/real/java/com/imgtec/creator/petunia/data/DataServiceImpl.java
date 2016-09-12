@@ -97,7 +97,7 @@ public class DataServiceImpl implements DataService {
 
           final List<Sensor> sensors = new ArrayList<>(clients.getItems().size());
           for (Client c: clients.getItems()) {
-            final ClientData data = c.getData(); //FIXME: refactor JSON structure
+            final ClientData data = c.getData();
             final Sensor sensor = new Sensor(data.getId(), data.getClientName(), data.getDelta());
             final Measurement m = new Measurement(sensor.getId(),
                                                   Float.parseFloat(data.getData()),

@@ -34,10 +34,12 @@ package com.imgtec.creator.petunia.data.api;
 import android.content.Context;
 
 import com.google.gson.GsonBuilder;
+import com.imgtec.creator.petunia.data.api.pojo.Api;
 import com.imgtec.creator.petunia.data.api.pojo.Client;
 import com.imgtec.creator.petunia.data.api.pojo.Clients;
 import com.imgtec.creator.petunia.data.api.pojo.Delta;
 import com.imgtec.creator.petunia.data.api.pojo.Measurements;
+import com.imgtec.creator.petunia.data.api.requests.DeleteRequest;
 import com.imgtec.creator.petunia.data.api.requests.GetData;
 import com.imgtec.creator.petunia.data.api.requests.GetRequest;
 import com.imgtec.creator.petunia.data.api.requests.UpdateDelta;
@@ -84,9 +86,11 @@ public class ApiServiceImpl implements ApiService {
   @Override
   public final Clients getClients(Filter<Client> filter) throws IOException {
 
-    final String urlString = url.toString()+"clients";  //FIXME: should be taken from API via 'rel = clients'
+    Api api = new GetRequest<Api>(url.toString()).execute(client, Api.class);
 
-    final Clients clients = new GetRequest<Clients>(urlString).execute(client, Clients.class);
+    final Clients clients = new GetRequest<Clients>(api.getLinkByRel("clients").getHref())
+        .execute(client, Clients.class);
+
     if (filter != null) {
       List<Client> clientList = new ArrayList<>();
       for (Client c: clients.getItems()) {
@@ -145,8 +149,8 @@ public class ApiServiceImpl implements ApiService {
   }
 
   @Override
-  public void clearAllMeasurements() {
-    //TODO: send request
-    throw new IllegalStateException("Not yet implemented!");
+  public void clearAllMeasurements() throws IOException {
+    Api api = new GetRequest<Api>(url.toString()).execute(client, Api.class);
+    new DeleteRequest(api.getLinkByRel("removeAll").getHref()).execute(client);
   }
 }
