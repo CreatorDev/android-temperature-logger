@@ -128,7 +128,8 @@ public class HistoryFragment extends BaseChartFragment {
       int relativeIndex = 0;
       for (int i = 0; i < measurementList.size(); ++i) {
         final Measurement m = measurementList.get(i);
-        final String x = dateFormat.format(DateUtils.UTCToLocal(measurementList.get(i).getTimestamp()));
+        //final String x = dateFormat.format(DateUtils.UTCToLocal(measurementList.get(i).getTimestamp()));
+        final String x = dateFormat.format(m.getTimestamp());
         if (!x.equals(lastX)) {
           relativeIndex++;
           lastX = x;
@@ -156,7 +157,7 @@ public class HistoryFragment extends BaseChartFragment {
       ArrayList<LineDataSet> dataSets = new ArrayList<>();
       int i = 0;
       for (Sensor s : sensors) {
-        LineDataSet dataSet = new LineDataSet(yVals.get(s.getId()), s.getId()); //(sensor name, id)
+        LineDataSet dataSet = new LineDataSet(yVals.get(s.getId()), s.getName()); //(sensor name, id)
 
         dataSet.setLineWidth(3f);
         dataSet.setCircleSize(3f);
@@ -191,7 +192,7 @@ public class HistoryFragment extends BaseChartFragment {
     @Override
     public void onSuccess(DataService service,List<Sensor> param,  List<Measurement> result) {
       BaseChartFragment f = fragment.get();
-      if (f != null) {
+      if (f != null && f.isAdded()) {
         final LineData lineData = f.getData(param, result);
         f.updateChart(lineData);
         f.showChartView();
@@ -201,7 +202,7 @@ public class HistoryFragment extends BaseChartFragment {
     @Override
     public void onFailure(DataService service, List<Sensor> param, Throwable t) {
       BaseChartFragment f = fragment.get();
-      if (f != null) {
+      if (f != null && f.isAdded()) {
         Toast.makeText(f.getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
 
         f.showChartView();

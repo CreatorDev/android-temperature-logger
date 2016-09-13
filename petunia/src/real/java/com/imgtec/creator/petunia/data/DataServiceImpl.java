@@ -43,14 +43,19 @@ import com.imgtec.creator.petunia.data.api.pojo.Measurements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -66,6 +71,7 @@ public class DataServiceImpl implements DataService {
   final Handler mainHandler;
   final ApiService apiService;
   final Map<Sensor, Measurement> sensorMeasurementMap = new HashMap<>();
+  boolean pollingEnabled = false;
 
   static {
     dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -80,14 +86,38 @@ public class DataServiceImpl implements DataService {
     this.apiService = builder.getApiService();
   }
 
+  @Override
+  public void startPollingForSensorChanges(final DataCallback<List<Sensor>> callback) {
+    synchronized (this) {
+      if (!pollingEnabled) {
+        pollingEnabled = true;
+        schedulePollingTask(callback);
+        logger.debug("Polling task started!");
+      }
+    }
+  }
 
   @Override
-  public void requestSensors(final DataCallback<List<Sensor>> callback) {
+  public void stopPolling() {
+    synchronized (this) {
+      if (pollingEnabled) {
+        pollingEnabled = false;
+        logger.debug("Polling task stopped!");
+      }
+    }
+  }
+
+  @Override
+  final public void requestSensors(final DataCallback<List<Sensor>> callback) {
     executor.execute(new Runnable() {
       @Override
       public void run() {
 
         try {
+          //when changing device orientation lets show data from cache if possible
+          //this will improve look & feel when fragment is re-created
+          loadFromCache(callback);
+
           final Clients clients = apiService.getClients(new ApiService.Filter<Client>() {
             @Override
             public boolean accept(Client client) {
@@ -100,7 +130,7 @@ public class DataServiceImpl implements DataService {
             final ClientData data = c.getData();
             final Sensor sensor = new Sensor(data.getId(), data.getClientName(), data.getDelta());
             final Measurement m = new Measurement(sensor.getId(),
-                                                  Float.parseFloat(data.getData()),
+                                                  Float.parseFloat(data.getValue()),
                                                   dateFormatter.parse(data.getTimestamp()));
 
             synchronized (sensorMeasurementMap) {
@@ -108,6 +138,8 @@ public class DataServiceImpl implements DataService {
             }
             sensors.add(sensor);
           }
+
+          Collections.sort(sensors, Sensor.COMPARATOR);
 
           mainHandler.post(new Runnable() {
             @Override
@@ -122,6 +154,30 @@ public class DataServiceImpl implements DataService {
             @Override
             public void run() {
               callback.onFailure(DataServiceImpl.this, e);
+            }
+          });
+        }
+      }
+
+      private void loadFromCache(final DataCallback<List<Sensor>> callback) {
+        boolean notify = false;
+        final List<Sensor> sensors = new ArrayList<>();
+        synchronized (sensorMeasurementMap) {
+          if (sensorMeasurementMap.size() > 0) {
+            notify = true;
+            for (Map.Entry<Sensor, Measurement> entry: sensorMeasurementMap.entrySet()) {
+              sensors.add(entry.getKey());
+            }
+          }
+        }
+
+        if (notify) {
+          Collections.sort(sensors, Sensor.COMPARATOR);
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onSuccess(DataServiceImpl.this, sensors);
             }
           });
         }
@@ -152,28 +208,7 @@ public class DataServiceImpl implements DataService {
       public void run() {
 
         try {
-          final Measurements measurements = apiService.getMeasurements(sensor.getId(), from, to);
-          final List<Measurement> measurementList = new ArrayList<>();
-          if (measurements.getMeasurements().size() > 0) {
-            Measurement lastMeasurement = new Measurement(sensor.getId(),
-                Float.parseFloat(measurements.getMeasurements().get(0).getData().getValue()),
-                dateFormatter.parse(measurements.getMeasurements().get(0).getData().getTimestamp()));
-
-            measurementList.add(lastMeasurement);
-
-            for (com.imgtec.creator.petunia.data.api.pojo.Measurement m : measurements.getMeasurements()) {
-              Date date = dateFormatter.parse(m.getData().getTimestamp());
-              if (Math.abs(lastMeasurement.getTimestamp().getTime() - date.getTime()) >= interval * 1000) {
-
-                Measurement measurement = new Measurement(sensor.getId(),
-                    Float.parseFloat(m.getData().getValue()),
-                    dateFormatter.parse(m.getData().getTimestamp()));
-
-                measurementList.add(measurement);
-                lastMeasurement = measurement;
-              }
-            }
-          }
+          final List<Measurement> measurementList = performMeasurementsRequest(sensor, from, to, interval);
 
           mainHandler.post(new Runnable() {
             @Override
@@ -199,6 +234,35 @@ public class DataServiceImpl implements DataService {
     });
   }
 
+  private List<Measurement> performMeasurementsRequest(Sensor sensor, Date from, Date to, long interval)
+      throws IOException, ParseException {
+
+    final List<Measurement> measurementList = new ArrayList<>();
+    final Measurements measurements = apiService.getMeasurements(sensor.getId(), from, to);
+    if (measurements.getMeasurements().size() > 0) {
+      Measurement lastMeasurement = new Measurement(sensor.getId(),
+          Float.parseFloat(measurements.getMeasurements().get(0).getData().getValue()),
+          dateFormatter.parse(measurements.getMeasurements().get(0).getData().getTimestamp()));
+
+      measurementList.add(lastMeasurement);
+
+      for (com.imgtec.creator.petunia.data.api.pojo.Measurement m : measurements.getMeasurements()) {
+        Date date = dateFormatter.parse(m.getData().getTimestamp());
+        if (Math.abs(lastMeasurement.getTimestamp().getTime() - date.getTime()) >= interval * 1000) {
+
+          Measurement measurement = new Measurement(sensor.getId(),
+              Float.parseFloat(m.getData().getValue()),
+              dateFormatter.parse(m.getData().getTimestamp()));
+
+          measurementList.add(measurement);
+          lastMeasurement = measurement;
+        }
+      }
+    }
+    return measurementList;
+  }
+
+
   @Override
   public void requestMeasurements(final Date from,
                                   final Date to,
@@ -207,14 +271,44 @@ public class DataServiceImpl implements DataService {
     executor.execute(new Runnable() {
       @Override
       public void run() {
-        //TODO: implement
+        final List<Sensor> sensors = new ArrayList<>();
 
-        mainHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callback.onFailure(DataServiceImpl.this, new ArrayList<Sensor>(), new IllegalStateException("Not yet implemented"));
+        try {
+          synchronized (sensorMeasurementMap) {
+            for (Map.Entry<Sensor, Measurement> entry : sensorMeasurementMap.entrySet()) {
+              sensors.add(entry.getKey());
+            }
           }
-        });
+
+          Collections.sort(sensors, Sensor.COMPARATOR);
+
+          final List<Measurement> measurements = new ArrayList<>();
+          for (Sensor s: sensors) {
+            measurements.addAll(performMeasurementsRequest(s, from, to, interval));
+          }
+
+          Collections.sort(measurements, new Comparator<Measurement>() {
+            @Override
+            public int compare(Measurement o1, Measurement o2) {
+              return o1.getTimestamp().compareTo(o2.getTimestamp());
+            }
+          });
+
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onSuccess(DataServiceImpl.this, sensors, measurements);
+            }
+          });
+        } catch (final Exception e) {
+          logger.warn("Requesting measurements for all sensors: <{}, {}> failed!", from, to, e);
+          mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callback.onFailure(DataServiceImpl.this, sensors, e);
+            }
+          });
+        }
       }
     });
   }
@@ -325,4 +419,28 @@ public class DataServiceImpl implements DataService {
       return apiService;
     }
   }
+
+
+  private void schedulePollingTask(DataCallback<List<Sensor>> callback) {
+    executor.schedule(new PollingTask(callback), 10, TimeUnit.SECONDS);
+  }
+
+  private class PollingTask implements Runnable {
+
+    private final DataCallback<List<Sensor>> callback;
+
+    public PollingTask(DataCallback<List<Sensor>> callback) {
+      this.callback = callback;
+    }
+
+    @Override
+    public void run() {
+      logger.debug("Executing polling task");
+      requestSensors(callback);
+      if (pollingEnabled) {
+        schedulePollingTask(callback);
+      }
+    }
+  }
+
 }

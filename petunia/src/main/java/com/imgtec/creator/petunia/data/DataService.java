@@ -50,6 +50,10 @@ public interface DataService {
     void onSuccess(final DataService service, final T1 param, final T2 result);
     void onFailure(final DataService service, final T1 param, final Throwable t);
   }
+
+  void startPollingForSensorChanges(final DataCallback<List<Sensor>> callback);
+  void stopPolling();
+
   void requestSensors(final DataCallback<List<Sensor>> callback);
 
   Measurement getLastMeasurementForSensor(final Sensor sensor);

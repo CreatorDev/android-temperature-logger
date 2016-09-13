@@ -155,7 +155,7 @@ public abstract class BaseChartFragment extends BaseFragment implements
         requestMeasurements();
       }
     }, 1000);
-    chart.getLineData();
+
     if (chart.getLineData() == null) {
       showProgressBar();
     }
@@ -243,6 +243,7 @@ public abstract class BaseChartFragment extends BaseFragment implements
   public void onDateSet(TimePeriod dateRange) {
     from = new Date(to.getTime() - dateRange.getInMillis());
     range = dateRange;
+    showProgressBar();
     requestMeasurements();
   }
 

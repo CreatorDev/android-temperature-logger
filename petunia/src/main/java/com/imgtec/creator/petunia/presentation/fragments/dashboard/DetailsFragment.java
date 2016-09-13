@@ -178,7 +178,7 @@ public class DetailsFragment extends BaseChartFragment {
     public void onSuccess(DataService service, Sensor param, List<Measurement> result) {
 
       BaseChartFragment f = fragment.get();
-      if (f != null) {
+      if (f != null && f.isAdded()) {
         final LineData lineData = f.getData(new ArrayList<>(Arrays.asList(param)), result);
         f.updateChart(lineData);
         f.showChartView();
@@ -188,7 +188,8 @@ public class DetailsFragment extends BaseChartFragment {
     @Override
     public void onFailure(DataService service, Sensor param, Throwable t) {
       BaseChartFragment f = fragment.get();
-      if (f != null) {
+      if (f != null && f.isAdded()) {
+        f.hideChartView();
         Toast.makeText(f.getContext(),
             String.format("Requesting measurements for sensors %s failed!" + t.getMessage(),
                 param.getId()),  Toast.LENGTH_LONG).show();

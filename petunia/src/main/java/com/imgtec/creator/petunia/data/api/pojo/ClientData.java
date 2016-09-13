@@ -46,9 +46,9 @@ public class ClientData {
     @SerializedName("client_name")
     @Expose
     private String clientName;
-    @SerializedName("data")
+    @SerializedName("last_value")
     @Expose
-    private String data;
+    private String value;
     @SerializedName("delta")
     @Expose
     private String delta;
@@ -72,12 +72,12 @@ public class ClientData {
         this.clientName = clientName;
     }
 
-    public String getData() {
-        return data;
+    public String getValue() {
+        return value;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getDelta() {

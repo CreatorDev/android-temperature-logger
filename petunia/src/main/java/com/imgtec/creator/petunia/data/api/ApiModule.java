@@ -40,6 +40,7 @@ import com.imgtec.di.PerApp;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 
@@ -86,6 +87,9 @@ public class ApiModule {
         .cache(cache)
         .addInterceptor(loggingInterceptor)
         .addInterceptor(oauthInterceptor)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
         .build();
     return okHttpClient;
   }

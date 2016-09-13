@@ -44,6 +44,16 @@ public class FakeDataService implements DataService {
   }
 
   @Override
+  public void startPollingForSensorChanges(DataCallback<List<Sensor>> callback) {
+    //skip
+  }
+
+  @Override
+  public void stopPolling() {
+    //skip
+  }
+
+  @Override
   public void requestSensors(final DataCallback<List<Sensor>> callback) {
     executor.schedule(new Runnable() {
       @Override
