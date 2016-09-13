@@ -32,7 +32,7 @@
 <resources>
 
     <!-- REMEMBER TO CHANGE app name -->
-    <string name="app_name">Project 4</string>
+    <string name="app_name">Temperature Logger</string>
 
     <!-- General -->
     <string name="no_internet_connection">You don\'t have internet connection. App works in offline mode.</string>
