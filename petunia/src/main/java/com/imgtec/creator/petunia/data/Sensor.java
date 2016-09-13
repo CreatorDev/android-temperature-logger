@@ -31,10 +31,19 @@
 
 package com.imgtec.creator.petunia.data;
 
+import java.util.Comparator;
+
 /**
  *
  */
 public class Sensor {
+
+  public static final Comparator<? super Sensor> COMPARATOR = new Comparator<Sensor>() {
+    @Override
+    public int compare(Sensor o1, Sensor o2) {
+      return o1.getName().compareTo(o2.getName());
+    }
+  };
 
   private final String id;
   private final String name;

@@ -168,6 +168,13 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
   public void onResume() {
     super.onResume();
     setupToolbar();
+    dataService.startPollingForSensorChanges(new SensorsCallback(this, dataService));
+  }
+
+  @Override
+  public void onPause() {
+    dataService.stopPolling();
+    super.onPause();
   }
 
   private void setupToolbar() {
@@ -258,6 +265,7 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
           final Measurement m = service.getLastMeasurementForSensor(s);
           list.add(new DashboardItem(s, m));
         }
+        f.adapter.clear();
         f.adapter.addAll(list);
         f.adapter.notifyDataSetChanged();
       }

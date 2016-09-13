@@ -81,7 +81,7 @@ ext {
 
     mpAndroidChartsVersion = 'v2.1.6'
     materialCalendarViewVersion = '1.1.0'
-    crashlyticsVersion = '2.5.5@aar'
+    crashlyticsVersion = '2.6.2@aar'
 
     daggerVersion = '2.5'
     jsr250Version = '1.0'
