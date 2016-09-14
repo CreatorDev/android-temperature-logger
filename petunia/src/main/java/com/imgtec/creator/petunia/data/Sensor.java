@@ -31,12 +31,13 @@
 
 package com.imgtec.creator.petunia.data;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  *
  */
-public class Sensor {
+public class Sensor implements Serializable {
 
   public static final Comparator<? super Sensor> COMPARATOR = new Comparator<Sensor>() {
     @Override

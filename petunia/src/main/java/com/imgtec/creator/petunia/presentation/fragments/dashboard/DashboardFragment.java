@@ -259,7 +259,7 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
     @Override
     public void onSuccess(DataService service, List<Sensor> result) {
       DashboardFragment f = fragment.get();
-      if (f != null) {
+      if (f != null && f.isAdded()) {
         List<DashboardItem> list = new ArrayList<>();
         for (Sensor s : result) {
           final Measurement m = service.getLastMeasurementForSensor(s);
@@ -274,7 +274,7 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
     @Override
     public void onFailure(DataService service, Throwable t) {
       DashboardFragment f = fragment.get();
-      if (f != null) {
+      if (f != null && f.isAdded()) {
         Toast.makeText(f.getContext(),
             String.format("Requesting sensors failed! %s", t.getMessage()),
             Toast.LENGTH_LONG).show();

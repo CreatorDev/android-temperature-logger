@@ -47,6 +47,11 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 1
+def versionBuild = 1
+
 android {
 
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -66,8 +71,8 @@ android {
         minSdkVersion globalConfiguration.getAt("petuniaMinSdkVersion")
         targetSdkVersion globalConfiguration.getAt("petuniaTargetSdkVersion")
 
-        versionCode globalConfiguration.getAt("petuniaVersionCode")
-        versionName globalConfiguration.getAt("petuniaVersionName")
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}-${versionBuild}"
 
         testApplicationId globalConfiguration.getAt("petuniaTestApplicationId")
 

@@ -31,12 +31,13 @@
 
 package com.imgtec.creator.petunia.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  */
-public class Measurement {
+public class Measurement implements Serializable {
 
   public static final int TYPE = 0;
   private final String sensorId;
