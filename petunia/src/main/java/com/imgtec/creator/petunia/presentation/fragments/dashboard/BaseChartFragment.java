@@ -110,7 +110,6 @@ public abstract class BaseChartFragment extends BaseFragment implements
 
   @BindView(R.id.chart) LineChart chart;
   @BindView(R.id.chart_progressbar) ProgressBar progressBar;
-  @BindView(R.id.chart_cache) ImageView chartCacheIV;
 
   protected SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d kk:mm:ss");
 
@@ -173,7 +172,6 @@ public abstract class BaseChartFragment extends BaseFragment implements
       return;
     }
     chart.setVisibility(View.INVISIBLE);
-    chartCacheIV.setVisibility(View.INVISIBLE);
     progressBar.setVisibility(View.VISIBLE);
   }
 
@@ -183,7 +181,6 @@ public abstract class BaseChartFragment extends BaseFragment implements
       return;
     }
     chart.setVisibility(View.VISIBLE);
-    chartCacheIV.setVisibility(View.INVISIBLE);
     progressBar.setVisibility(View.INVISIBLE);
   }
 
@@ -192,8 +189,7 @@ public abstract class BaseChartFragment extends BaseFragment implements
     if (chart == null) {
       return;
     }
-    chartCacheIV.setImageBitmap(chart.getChartBitmap());
-    chartCacheIV.setVisibility(View.VISIBLE);
+
     chart.setVisibility(View.INVISIBLE);
     progressBar.setVisibility(View.INVISIBLE);
   }
