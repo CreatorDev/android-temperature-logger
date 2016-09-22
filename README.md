@@ -9,6 +9,11 @@ consisted of:
 * web application providing cloud storage
 * mobile application
 
+## Prerequisites
+
+Just import project to Android Studio, choose proper variant and you are
+ready to go.
+
 ## About the application
 
 Mobile app is only one piece of a puzzle and covers a few simple
@@ -27,6 +32,13 @@ using REST API (HATEOAS constraints).
 
 With this approach all heavy-lifting operations, communication with device server or
 managing database was moved to a server side leaving communication as simple as possible.
+
+### Authorization
+As an authorization model we've taken a simple token based approach. It means that 
+every HTTP request must contain custom header 'x-access-token' with 
+a token provided by the web app.
+As a starting point please check ```ApiModule``` class - it provides an
+entry point you need to know to communicate with the web application. 
 
 ## License
 Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies.
