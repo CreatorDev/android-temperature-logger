@@ -48,7 +48,7 @@ ext {
     //Android:
 
     petuniaCompileSdkVersion = 24
-    petuniaBuildToolsVersion = '24.0.2'
+    petuniaBuildToolsVersion = '25.0.0'
 
     petuniaApplicationId = 'com.imgtec.creator.project4'
     petuniaTestApplicationId = 'com.imgtec.creator.project4.test'
@@ -60,7 +60,7 @@ ext {
 
     //----------------------------------------------------------------------
     diCompileSdkVersion = 24
-    diBuildToolsVersion = '24.0.2'
+    diBuildToolsVersion = '25.0.0'
 
     diMinSdkVersion = 15
     diTargetSdkVersion = 24
