@@ -34,7 +34,6 @@ package com.imgtec.creator.petunia.app;
 
 import android.app.Application;
 
-import com.crashlytics.android.Crashlytics;
 import com.imgtec.creator.petunia.BuildConfig;
 import com.imgtec.di.HasComponent;
 import com.squareup.leakcanary.LeakCanary;
@@ -42,8 +41,6 @@ import com.squareup.leakcanary.RefWatcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -64,7 +61,6 @@ public class App extends Application implements HasComponent<ApplicationComponen
 
     refWatcher = installLeakCanary();
 
-    initCrashlytics();
     logger.debug("---> Application created: {}", this);
   }
 
@@ -74,12 +70,6 @@ public class App extends Application implements HasComponent<ApplicationComponen
     }
     else {
       return RefWatcher.DISABLED;
-    }
-  }
-
-  private void initCrashlytics() {
-    if (BuildConfig.USE_CRASHLYTICS) {
-      Fabric.with(this, new Crashlytics());
     }
   }
 
