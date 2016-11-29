@@ -31,15 +31,8 @@
 
 allprojects {
     repositories {
-        mavenLocal()
-        maven {
-            url "http://nexus.flowservices.systems/content/groups/public"
-        }
-        maven {
-            url "https://jitpack.io"
-        }
-
-        mavenCentral()
+        jcenter()
+	maven { url "https://jitpack.io" }
     }
 }
 
@@ -47,23 +40,23 @@ ext {
 
     //Android:
 
-    petuniaCompileSdkVersion = 24
-    petuniaBuildToolsVersion = '25.0.0'
+    petuniaCompileSdkVersion = 25
+    petuniaBuildToolsVersion = '25.0.1'
 
     petuniaApplicationId = 'com.imgtec.creator.project4'
     petuniaTestApplicationId = 'com.imgtec.creator.project4.test'
     petuniaMinSdkVersion = 15
-    petuniaTargetSdkVersion = 24
+    petuniaTargetSdkVersion = 25
     petuniaVersionCode = 1
     petuniaVersionName = "1.0.0"
 
 
     //----------------------------------------------------------------------
-    diCompileSdkVersion = 24
-    diBuildToolsVersion = '25.0.0'
+    diCompileSdkVersion = 25
+    diBuildToolsVersion = '25.0.1'
 
     diMinSdkVersion = 15
-    diTargetSdkVersion = 24
+    diTargetSdkVersion = 25
     diVersionCode = 1
     diVersionName = "1.0.0"
     //----------------------------------------------------------------------
