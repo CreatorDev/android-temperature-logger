@@ -22,6 +22,8 @@ import com.imgtec.creator.petunia.data.DataService;
 import com.imgtec.creator.petunia.data.FakeDataModule;
 import com.imgtec.creator.petunia.data.api.ApiModule;
 import com.imgtec.creator.petunia.data.api.ApiService;
+import com.imgtec.creator.petunia.data.api.CredentialsWrapper;
+import com.imgtec.creator.petunia.data.api.HostWrapper;
 import com.imgtec.di.PerApp;
 
 import javax.inject.Named;
@@ -56,6 +58,10 @@ public interface ApplicationComponent {
   SharedPreferences getSharedPreferences();
 
   @Named("Main") Handler getHandler();
+
+  HostWrapper getHostWrapper();
+
+  CredentialsWrapper getCredentialsWrapper();
 
   DataService getDataService();
 

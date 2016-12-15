@@ -40,11 +40,35 @@ import javax.inject.Inject;
  */
 public class Preferences {
 
+  private static final String HOST = "HOST";
+  private static final String SECRET = "SECRET";
+  private static final String TOKEN = "TOOKEN";
+
   private final SharedPreferences sharedPreferences;
 
   @Inject
   Preferences(SharedPreferences prefs) {
     this.sharedPreferences = prefs;
+  }
+
+  public Configuration getConfiguration() {
+    final String host = sharedPreferences.getString(HOST, "");
+    final String secret = sharedPreferences.getString(SECRET, "");
+    final String token = sharedPreferences.getString(TOKEN, "");
+
+    if (host.isEmpty() || secret.isEmpty() || token.isEmpty()) {
+      return null;
+    }
+
+    return new Configuration(host, secret, token);
+  }
+
+  public void saveConfiguration(Configuration configuration) {
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putString(HOST, configuration.getHost());
+    editor.putString(SECRET, configuration.getSecret());
+    editor.putString(TOKEN, configuration.getToken());
+    editor.commit();
   }
 
   //TODO: implement

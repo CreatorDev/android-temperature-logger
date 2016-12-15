@@ -29,60 +29,35 @@
  *
  */
 
-package com.imgtec.creator.petunia.app;
+package com.imgtec.creator.petunia.data.api;
 
-import android.content.SharedPreferences;
-import android.os.Handler;
 
-import com.imgtec.creator.petunia.data.DataModuleImpl;
-import com.imgtec.creator.petunia.data.DataService;
-import com.imgtec.creator.petunia.data.api.ApiModule;
-import com.imgtec.creator.petunia.data.api.ApiService;
-import com.imgtec.creator.petunia.data.api.CredentialsWrapper;
-import com.imgtec.creator.petunia.data.api.HostWrapper;
-import com.imgtec.di.PerApp;
+import com.imgtec.creator.petunia.data.Configuration;
 
-import javax.inject.Named;
+public class CredentialsWrapper {
 
-import dagger.Component;
-import okhttp3.OkHttpClient;
+  private String secret;
+  private String token;
 
-@PerApp
-@Component(
-    modules = {
-        ApplicationModule.class,
-        DataModuleImpl.class,
-        ApiModule.class
-    }
-)
-public interface ApplicationComponent {
+  public CredentialsWrapper(Configuration configuration) {
 
-  final class Initializer {
-
-    private Initializer() {}
-
-    static ApplicationComponent init(App application) {
-      return DaggerApplicationComponent
-          .builder()
-          .applicationModule(new ApplicationModule(application))
-          .apiModule(new ApiModule())
-          .build();
-    }
+    this.secret = configuration != null ? configuration.getSecret() : "";
+    this.token = configuration != null ? configuration.getToken() : "";
   }
 
-  App inject(App app);
+  public String getSecret() {
+    return secret;
+  }
 
-  SharedPreferences getSharedPreferences();
+  public void setSecret(String secret) {
+    this.secret = secret;
+  }
 
-  @Named("Main") Handler getHandler();
+  public String getToken() {
+    return token;
+  }
 
-  HostWrapper getHostWrapper();
-  CredentialsWrapper getCredentialsWrapper();
-
-  DataService getDataService();
-
-  OkHttpClient getOkHttpClient();
-
-  ApiService getApiService();
+  public void setToken(String token) {
+    this.token = token;
+  }
 }
-

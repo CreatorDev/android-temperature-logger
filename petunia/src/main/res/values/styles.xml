@@ -133,4 +133,10 @@
     <style name="DashboardItemUnit">
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/supporting_color_light_purple</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
 </resources>

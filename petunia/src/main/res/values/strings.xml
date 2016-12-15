@@ -73,6 +73,9 @@
     <string name="delta">delta:</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="host">Host</string>
+    <string name="secret">Secret</string>
+    <string name="enter_credentials">Web App credentials</string>
 
 
 </resources>
