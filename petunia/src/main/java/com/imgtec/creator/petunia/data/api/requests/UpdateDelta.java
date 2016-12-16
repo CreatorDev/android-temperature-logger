@@ -31,9 +31,9 @@
 
 package com.imgtec.creator.petunia.data.api.requests;
 
-import com.google.gson.GsonBuilder;
 import com.imgtec.creator.petunia.data.api.pojo.Delta;
-import com.imgtec.creator.petunia.data.api.pojo.DeltaData;
+
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -58,12 +58,12 @@ public class UpdateDelta extends BaseRequest<Delta> {
   public Request prepareRequest() {
 
     HttpUrl url = HttpUrl.parse(getUrl());
-    String str = String.format("\"delta\": \"%s\"", delta);
+    String str = String.format(Locale.US, "{\"delta\": %.2f}", delta);
     Request.Builder builder = new Request.Builder();
     builder.url(url
         .newBuilder()
         .build())
-        .put(RequestBody.create(MediaType.parse("x-www-form-urlencoded"), str))
+        .put(RequestBody.create(MediaType.parse("application/json"), str))
         .build();
 
     return builder.build();
