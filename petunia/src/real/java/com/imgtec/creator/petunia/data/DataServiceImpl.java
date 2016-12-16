@@ -134,6 +134,7 @@ public class DataServiceImpl implements DataService {
                                                   dateFormatter.parse(data.getTimestamp()));
 
             synchronized (sensorMeasurementMap) {
+              sensorMeasurementMap.remove(sensor);
               sensorMeasurementMap.put(sensor, m);
             }
             sensors.add(sensor);
