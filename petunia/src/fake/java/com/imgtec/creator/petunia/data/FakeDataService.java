@@ -54,6 +54,11 @@ public class FakeDataService implements DataService {
   }
 
   @Override
+  public void clearCache() {
+    //skip
+  }
+
+  @Override
   public void requestSensors(final DataCallback<List<Sensor>> callback) {
     executor.schedule(new Runnable() {
       @Override
