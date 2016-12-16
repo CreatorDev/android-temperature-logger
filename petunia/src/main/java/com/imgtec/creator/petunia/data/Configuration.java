@@ -29,60 +29,44 @@
  *
  */
 
-package com.imgtec.creator.petunia.app;
+package com.imgtec.creator.petunia.data;
 
-import android.content.SharedPreferences;
-import android.os.Handler;
+/**
+ *
+ */
+public class Configuration {
 
-import com.imgtec.creator.petunia.data.DataModuleImpl;
-import com.imgtec.creator.petunia.data.DataService;
-import com.imgtec.creator.petunia.data.api.ApiModule;
-import com.imgtec.creator.petunia.data.api.ApiService;
-import com.imgtec.creator.petunia.data.api.CredentialsWrapper;
-import com.imgtec.creator.petunia.data.api.HostWrapper;
-import com.imgtec.di.PerApp;
+  private String host;
+  private String secret;
+  private String token;
 
-import javax.inject.Named;
-
-import dagger.Component;
-import okhttp3.OkHttpClient;
-
-@PerApp
-@Component(
-    modules = {
-        ApplicationModule.class,
-        DataModuleImpl.class,
-        ApiModule.class
-    }
-)
-public interface ApplicationComponent {
-
-  final class Initializer {
-
-    private Initializer() {}
-
-    static ApplicationComponent init(App application) {
-      return DaggerApplicationComponent
-          .builder()
-          .applicationModule(new ApplicationModule(application))
-          .apiModule(new ApiModule())
-          .build();
-    }
+  public Configuration(String host, String secret, String token) {
+    this.host = host;
+    this.secret = secret;
+    this.token = token;
   }
 
-  App inject(App app);
+  public String getHost() {
+    return host;
+  }
 
-  SharedPreferences getSharedPreferences();
+  public void setHost(String host) {
+    this.host = host;
+  }
 
-  @Named("Main") Handler getHandler();
+  public String getSecret() {
+    return secret;
+  }
 
-  HostWrapper getHostWrapper();
-  CredentialsWrapper getCredentialsWrapper();
+  public void setSecret(String secret) {
+    this.secret = secret;
+  }
 
-  DataService getDataService();
+  public String getToken() {
+    return token;
+  }
 
-  OkHttpClient getOkHttpClient();
-
-  ApiService getApiService();
+  public void setToken(String token) {
+    this.token = token;
+  }
 }
-

@@ -45,20 +45,20 @@ import okhttp3.Response;
 @PerApp
 public final class AuthInterceptor implements Interceptor {
 
-  private final String token;
+  private final CredentialsWrapper credentials;
 
-  AuthInterceptor(final String token) {
+  AuthInterceptor(final CredentialsWrapper credentials) {
     super();
-    this.token = token;
+    this.credentials = credentials;
   }
 
   @Override public Response intercept(Chain chain) throws IOException {
 
-    Request request = chain
-        .request()
-        .newBuilder()
-          .addHeader("x-access-token", token)
-        .build();
-    return chain.proceed(request);
+    Request.Builder builder = chain.request().newBuilder();
+    if (credentials.getToken() != null && !credentials.getToken().isEmpty()) {
+      builder.addHeader("x-access-token", credentials.getToken());
+    }
+
+    return chain.proceed(builder.build());
   }
 }

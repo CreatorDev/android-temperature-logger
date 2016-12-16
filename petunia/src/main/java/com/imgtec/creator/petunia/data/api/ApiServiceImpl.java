@@ -65,7 +65,7 @@ public class ApiServiceImpl implements ApiService {
       new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
   final Context appContext;
-  final HttpUrl url;
+  final HostWrapper url;
   final OkHttpClient client;
   final ExecutorService executorService;
 
@@ -74,7 +74,7 @@ public class ApiServiceImpl implements ApiService {
   }
 
   @Inject
-  ApiServiceImpl(final Context appContext, final HttpUrl url, final OkHttpClient client,
+  ApiServiceImpl(final Context appContext, final HostWrapper url, final OkHttpClient client,
                  final ExecutorService executorService) {
     super();
     this.appContext = appContext;
@@ -86,7 +86,7 @@ public class ApiServiceImpl implements ApiService {
   @Override
   public final Clients getClients(Filter<Client> filter) throws IOException {
 
-    Api api = new GetRequest<Api>(url.toString()).execute(client, Api.class);
+    Api api = new GetRequest<Api>(url.getHost().toString()).execute(client, Api.class);
 
     final Clients clients = new GetRequest<Clients>(api.getLinkByRel("clients").getHref())
         .execute(client, Clients.class);
@@ -150,7 +150,7 @@ public class ApiServiceImpl implements ApiService {
 
   @Override
   public void clearAllMeasurements() throws IOException {
-    Api api = new GetRequest<Api>(url.toString()).execute(client, Api.class);
+    Api api = new GetRequest<Api>(url.getHost().toString()).execute(client, Api.class);
     new DeleteRequest(api.getLinkByRel("removeAll").getHref()).execute(client);
   }
 }

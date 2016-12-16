@@ -36,6 +36,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.imgtec.creator.petunia.app.App;
+import com.imgtec.creator.petunia.data.Preferences;
 import com.imgtec.di.PerApp;
 
 import java.io.File;
@@ -58,20 +59,21 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class ApiModule {
 
   private static final long CACHE_DISK_SIZE = 50 * 1024 * 1024;
-  private static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUg" +
-      "SldUIEJ1aWxkZXIiLCJpYXQiOjE0Njg0MTQxMDAsImV4cCI6MTQ5OTk1MDEwMCwiYXVkIjoid3d3LmV4YW1wbGUuY" +
-      "29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2" +
-      "NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWl" +
-      "uaXN0cmF0b3IiXX0.KTzci15ZjTlNDbJf93rbovSyX_F-4NINaqh6-Q77nW0";
 
-  @Provides @PerApp @Named("Auth")
-  String provideAuthToken() {
-    return TOKEN;
+
+  @Provides @PerApp
+  HostWrapper provideHostWrapper(Preferences prefs) {
+    return new HostWrapper(prefs.getConfiguration());
   }
 
   @Provides @PerApp
-  AuthInterceptor provideAuthInterceptor(@Named("Auth") final String authToken) {
-    return new AuthInterceptor(authToken);
+  CredentialsWrapper provideCredentialsWrapper(Preferences prefs) {
+    return new CredentialsWrapper(prefs.getConfiguration());
+  }
+
+  @Provides @PerApp
+  AuthInterceptor provideAuthInterceptor(CredentialsWrapper credentialsWrapper) {
+    return new AuthInterceptor(credentialsWrapper);
   }
 
   @Provides @PerApp
@@ -95,11 +97,6 @@ public class ApiModule {
   }
 
   @Provides @PerApp
-  HttpUrl provideBaseUrl() {
-    return HttpUrl.parse("http://kiwano.herokuapp.com/api/v1/");
-  }
-
-  @Provides @PerApp
   Gson provideGson() {
     Gson gson = new GsonBuilder()
         .create();
@@ -108,7 +105,7 @@ public class ApiModule {
 
   @Provides @PerApp
   ApiService provideApiService(final Context appContext,
-                               final HttpUrl url,
+                               final HostWrapper url,
                                final OkHttpClient client,
                                final ExecutorService executorService) {
     return new ApiServiceImpl(appContext, url, client, executorService);

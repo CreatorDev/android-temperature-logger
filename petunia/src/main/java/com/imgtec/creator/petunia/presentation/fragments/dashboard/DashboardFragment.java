@@ -36,7 +36,6 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -58,9 +57,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.imgtec.creator.petunia.R;
+import com.imgtec.creator.petunia.data.Configuration;
 import com.imgtec.creator.petunia.data.DataService;
 import com.imgtec.creator.petunia.data.Measurement;
+import com.imgtec.creator.petunia.data.Preferences;
 import com.imgtec.creator.petunia.data.Sensor;
+import com.imgtec.creator.petunia.data.api.CredentialsWrapper;
+import com.imgtec.creator.petunia.data.api.HostWrapper;
 import com.imgtec.creator.petunia.presentation.ActivityComponent;
 import com.imgtec.creator.petunia.presentation.adapters.DashboardAdapter;
 import com.imgtec.creator.petunia.presentation.adapters.DashboardItem;
@@ -81,6 +84,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 
 /**
  *
@@ -88,13 +94,21 @@ import butterknife.OnClick;
 public class DashboardFragment extends BaseFragment implements ChangeSensorDeltaListener {
 
 
+  private static String host;
+  private static String secret;
+  private static String token;
+
   final Logger logger = LoggerFactory.getLogger(getClass());
 
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
   @Inject DataService dataService;
+  @Inject Preferences prefs;
+  @Inject HostWrapper hostWrapper;
+  @Inject CredentialsWrapper credentialsWrapper;
 
   private DashboardAdapter adapter;
+  private AlertDialog configurationDialog;
 
 
   public static Fragment newInstance() {
@@ -157,23 +171,31 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
           }
         });
 
-    loadSensors();
   }
 
   private void loadSensors() {
     dataService.requestSensors(new SensorsCallback(this, dataService));
+    dataService.startPollingForSensorChanges(new SensorsCallback(this, dataService));
   }
 
   @Override
   public void onResume() {
     super.onResume();
     setupToolbar();
-    dataService.startPollingForSensorChanges(new SensorsCallback(this, dataService));
+    if (prefs.getConfiguration() == null) {
+      showConfigurationDialog();
+    }
+    else {
+      loadSensors();
+    }
   }
 
   @Override
   public void onPause() {
     dataService.stopPolling();
+    if (configurationDialog != null) {
+      configurationDialog.dismiss();
+    }
     super.onPause();
   }
 
@@ -202,6 +224,9 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
 
       dataService.clearAllMeasurements(new ClearAllCallback(this));
       return true;
+    }
+    else if (item.getItemId() == R.id.settings) {
+      showConfigurationDialog();
     }
     return super.onOptionsItemSelected(item);
   }
@@ -244,6 +269,68 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
         .show();
   }
 
+
+  private void showConfigurationDialog() {
+    LayoutInflater inflater = getLayoutInflater(null);
+    final View dialogView = inflater.inflate(R.layout.configuration_dialog, null);
+    final EditText host = (EditText) dialogView.findViewById(R.id.host);
+    final EditText secret = (EditText) dialogView.findViewById(R.id.secret);
+
+    Configuration configuration = prefs.getConfiguration();
+    if (configuration != null) {
+      host.setText(configuration.getHost());
+      secret.setText(configuration.getSecret());
+    }
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+    builder
+        .setTitle(R.string.enter_credentials)
+        .setView(dialogView)
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+            configurationDialog = null;
+          }
+        })
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+
+            DashboardFragment.host = host.getText().toString();
+            DashboardFragment.secret = secret.getText().toString();
+
+            if (DashboardFragment.host == null || DashboardFragment.host.isEmpty() ||
+                DashboardFragment.secret == null || DashboardFragment.secret.isEmpty()) {
+              Toast.makeText(getContext(), "Host or secret is missing", Toast.LENGTH_LONG).show();
+              return;
+            }
+
+
+              DashboardFragment.token = Jwts.builder()
+                  .setSubject("Subject")
+                  .signWith(SignatureAlgorithm.HS256, DashboardFragment.secret.getBytes())
+                  .compact();
+
+            Configuration configuration = new Configuration(DashboardFragment.host,
+                DashboardFragment.secret, DashboardFragment.token);
+            prefs.saveConfiguration(configuration);
+
+            //update wrapper
+            hostWrapper.setHost(DashboardFragment.host);
+            credentialsWrapper.setSecret(DashboardFragment.secret);
+            credentialsWrapper.setToken(DashboardFragment.token);
+
+            loadSensors();
+
+            dialog.dismiss();
+            configurationDialog = null;
+          }
+        });
+
+    configurationDialog = builder.create();
+    configurationDialog.show();
+  }
 
   private static class SensorsCallback implements DataService.DataCallback<List<Sensor>> {
 
