@@ -108,6 +108,13 @@ public class DataServiceImpl implements DataService {
   }
 
   @Override
+  public void clearCache() {
+    synchronized (sensorMeasurementMap) {
+      sensorMeasurementMap.clear();
+    }
+  }
+
+  @Override
   final public void requestSensors(final DataCallback<List<Sensor>> callback) {
     executor.execute(new Runnable() {
       @Override

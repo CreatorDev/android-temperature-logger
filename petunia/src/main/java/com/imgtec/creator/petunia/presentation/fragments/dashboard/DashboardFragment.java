@@ -178,6 +178,10 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
     dataService.startPollingForSensorChanges(new SensorsCallback(this, dataService));
   }
 
+  private void clearCache() {
+    dataService.clearCache();
+  }
+
   @Override
   public void onResume() {
     super.onResume();
@@ -321,6 +325,7 @@ public class DashboardFragment extends BaseFragment implements ChangeSensorDelta
             credentialsWrapper.setSecret(DashboardFragment.secret);
             credentialsWrapper.setToken(DashboardFragment.token);
 
+            clearCache();
             loadSensors();
 
             dialog.dismiss();

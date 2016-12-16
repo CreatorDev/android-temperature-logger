@@ -54,6 +54,7 @@ public interface DataService {
   void startPollingForSensorChanges(final DataCallback<List<Sensor>> callback);
   void stopPolling();
 
+  void clearCache();
   void requestSensors(final DataCallback<List<Sensor>> callback);
 
   Measurement getLastMeasurementForSensor(final Sensor sensor);
