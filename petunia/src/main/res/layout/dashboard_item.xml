@@ -96,6 +96,7 @@
             android:layout_toRightOf="@id/deltaTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_alignParentBottom="true"
             tools:text="0.5"/>
 
