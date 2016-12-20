@@ -44,6 +44,35 @@ a token provided by the web app.
 As a starting point please check ```ApiModule``` class - it provides an
 entry point you need to know to communicate with the web application. 
 
+### Troubleshooting
+
+#### Gradle synchronization failure
+
+If you encounter this error:
+
+```
+Gradle sync failed: Could not get unknown property 'keyAlias' for project ':petunia' of type org.gradle.api.Project.
+         Consult IDE log for more details (Help | Show Log)
+```
+
+Create a file named gradle.properties in the root directory of the project with the following content:
+```
+keyAlias = ???
+keyPassword = ???
+storeFile = ???
+storePassword = ???
+```
+
+#### Android-Studio/Petunia incompatible version
+
+If you see this message:
+```
+Error running petunia: This version of Android Studio is incompatible with the Gradle Plugin used. Try disabling Instant Run (or updating either the IDE or the Gradle plugin to the latest version)
+```
+
+In recent versions of Android Studio (tested with 2.2.3), this is fixed by disabling option ```Enable instant run to hot swap code``` in ```Settings``` -> ```Build,Execution,Deployment``` -> ```Instant Run```. Then, clean the project.
+
+
 ## License
 Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies.
 All rights reserved.
