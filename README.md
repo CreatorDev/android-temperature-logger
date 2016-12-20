@@ -24,6 +24,10 @@ use-cases:
 * user can update the 'delta' value,
 * user can clear all measurements.
 
+Beware that they are currently two variants of the application: fake and real.
+If you are building the fake variant, you will see some fake data in the history,
+even if you did not specify any credentials.
+
 ### Communication
 As it was mentioned above main responsibility of the mobile application is to
 provide simple visualization of measured temperatures.
