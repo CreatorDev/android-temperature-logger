@@ -1,0 +1,142 @@
+<!--
+  ~ <b>Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies
+  ~  and/or licensors. </b>
+  ~
+  ~  All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without modification, are permitted
+  ~  provided that the following conditions are met:
+  ~
+  ~  1. Redistributions of source code must retain the above copyright notice, this list of conditions
+  ~      and the following disclaimer.
+  ~
+  ~  2. Redistributions in binary form must reproduce the above copyright notice, this list of
+  ~      conditions and the following disclaimer in the documentation and/or other materials provided
+  ~      with the distribution.
+  ~
+  ~  3. Neither the name of the copyright holder nor the names of its contributors may be used to
+  ~      endorse or promote products derived from this software without specific prior written
+  ~      permission.
+  ~
+  ~  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+  ~  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+  ~  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  ~  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  ~  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  ~  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  ~  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  ~  WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  ~
+  -->
+
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary_color_purple</item>
+        <item name="colorAccent">@color/supporting_color_light_purple</item>
+
+        <item name="android:editTextStyle">@style/CustomEditText</item>
+        <item name="buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+
+        <item name="android:actionBarSize">80dp</item>
+        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">?attr/colorPrimary</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_clear_white_24dp</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_clear_white_24dp</item>
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/primary_color_purple</item>
+        <item name="colorPrimaryDark">@color/supporting_color_dark_purple</item>
+        <item name="colorAccent">@color/supporting_color_light_purple</item>
+
+        <item name="buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="ActionModeStyle">
+        <item name="background">?attr/colorPrimary</item>
+        <item name="height">56dp</item>
+        <item name="android:actionModeBackground">?attr/colorPrimary</item>
+        <item name="android:actionModeSplitBackground">?attr/colorPrimary</item>
+        <item name="android:height">?android:attr/actionBarSize</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/base_button_selector</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textColor">@drawable/base_button_text_color_selector</item>
+    </style>
+
+    <style name="CustomEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">@dimen/rounded_edit_text_size</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">@dimen/edit_text_padding</item>
+        <item name="android:background">@drawable/stroke_shape</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">@color/primary_color_purple</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="ListItemImage">
+        <item name="android:layout_width">75dp</item>
+        <item name="android:layout_height">75dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="RetryButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="errorMessageStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">@color/error</item>
+    </style>
+
+    <style name="DashboardItemTitle">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="DashboardItemValue">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="DashboardItemUnit">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/supporting_color_light_purple</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+</resources>

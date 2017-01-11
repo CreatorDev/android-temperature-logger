@@ -1,0 +1,129 @@
+/*
+ * <b>Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies
+ *  and/or licensors. </b>
+ *
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without modification, are permitted
+ *  provided that the following conditions are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice, this list of conditions
+ *      and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice, this list of
+ *      conditions and the following disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *
+ *  3. Neither the name of the copyright holder nor the names of its contributors may be used to
+ *      endorse or promote products derived from this software without specific prior written
+ *      permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ *  WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+allprojects {
+    repositories {
+        jcenter()
+	maven { url "https://jitpack.io" }
+    }
+}
+
+ext {
+
+    //Android:
+
+    petuniaCompileSdkVersion = 25
+    petuniaBuildToolsVersion = '25.0.1'
+
+    petuniaApplicationId = 'com.imgtec.creator.project4'
+    petuniaTestApplicationId = 'com.imgtec.creator.project4.test'
+    petuniaMinSdkVersion = 15
+    petuniaTargetSdkVersion = 25
+    petuniaVersionCode = 1
+    petuniaVersionName = "1.0.0"
+
+
+    //----------------------------------------------------------------------
+    diCompileSdkVersion = 25
+    diBuildToolsVersion = '25.0.1'
+
+    diMinSdkVersion = 15
+    diTargetSdkVersion = 25
+    diVersionCode = 1
+    diVersionName = "1.0.0"
+    //----------------------------------------------------------------------
+
+    //libraries
+    appCompatVersion = '24.2.0'
+    appDesignVersion = '24.2.0'
+    recyclerViewVersion = '24.2.0'
+    cardViewVersion = '24.2.0'
+
+    butterKnifeVersion = '8.1.0'
+
+    slf4jVersion = '1.7.4'
+    logbackVersion = '1.1.1-4'
+
+    mpAndroidChartsVersion = 'v2.1.6'
+    materialCalendarViewVersion = '1.1.0'
+    crashlyticsVersion = '2.6.2@aar'
+
+    daggerVersion = '2.5'
+    jsr250Version = '1.0'
+
+    leakcanaryVersion = '1.3.1'
+    leakcanaryNoOpVersion = '1.3.1'
+
+    javaxInjectVersion = '1'
+
+    retrofitVersion = '2.1.0'
+    okhttpVersion = '3.4.0-RC1'
+    gsonVersion = '2.7'
+    gsonConverterVersion = '2.1.0'
+    okhttpLoggingInterceptorVersion = '3.4.0-RC1'
+
+    //dependencies:
+    //petunia module
+    petuniaDependencies = [
+            appCompat:      "com.android.support:appcompat-v7:${appCompatVersion}",
+            appDesign:      "com.android.support:design:${appDesignVersion}",
+            recyclerView:   "com.android.support:recyclerview-v7:${recyclerViewVersion}",
+            cardView:       "com.android.support:cardview-v7:${cardViewVersion}",
+            mpAndroidCharts: "com.github.PhilJay:MPAndroidChart:${mpAndroidChartsVersion}",
+            materialCalandarView: "com.prolificinteractive:material-calendarview:${materialCalendarViewVersion}",
+
+            slf4j:          "org.slf4j:slf4j-api:${slf4jVersion}",
+            logback:        "com.github.tony19:logback-android-classic:${logbackVersion}",
+
+            butterKnife:    "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterKnifeCompiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+
+            dagger:         "com.google.dagger:dagger:${daggerVersion}",
+            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
+            jsr250:         "javax.annotation:jsr250-api:${jsr250Version}",
+
+            crashlytics:    "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}",
+
+            leakcanary:     "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}",
+            leakcanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryNoOpVersion}",
+
+            gson:           "com.google.code.gson:gson:${gsonVersion}",
+            okhttp:         "com.squareup.okhttp3:okhttp:${okhttpVersion}",
+            okhttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okhttpLoggingInterceptorVersion}"
+
+    ]
+
+    //di module
+    diDependencies = [
+            appCompat:      "com.android.support:appcompat-v7:${appCompatVersion}",
+            javaxInject: "javax.inject:javax.inject:${javaxInjectVersion}"
+    ]
+}
